@@ -8,6 +8,7 @@ class ConsoleRenderer:
         self.atualizar_tamanho_terminal()
         self.fg_code = "37"  # Branco frontal padrão
         self.bg_code = "40"  # Preto de fundo padrão
+        self.screen_buffer = {}  # Armazena as cores (fg, bg) de cada célula (row, col)
         self.colors = {
             # Cores frontais (3x) e fundos (4x)
             0: ("30", "40"),  # Preto
@@ -30,7 +31,7 @@ class ConsoleRenderer:
         self.limpar_tela()
 
     def get_start_pos(self):
-        return self.width // 2, self.height // 2
+        return self.width // 2, self.logical_height // 2
 
     def atualizar_tamanho_terminal(self):
         try:
@@ -41,10 +42,14 @@ class ConsoleRenderer:
             self.width = 80
             self.height = 24
 
+        # Cada célula do terminal tem 2 "pixels" verticais (usando ▀)
+        self.logical_height = self.height * 2
+
     def limpar_tela(self):
         os.system("cls" if os.name == "nt" else "clear")
         sys.stdout.write("\033[?25l")
         sys.stdout.flush()
+        self.screen_buffer = {}
 
     def set_color(self, index):
         self.fg_code, self.bg_code = self.colors.get(index, ("37", "40"))
@@ -65,9 +70,51 @@ class ConsoleRenderer:
     def _plot(self, x, y):
         cx = int(round(x))
         cy = int(round(y))
-        if 1 <= cx <= self.width and 1 <= cy <= self.height:
-            # \033[fg;bgm -> define cor frontal e fundo
-            sys.stdout.write(f"\033[{cy};{cx}H\033[{self.fg_code};{self.bg_code}m█")
+
+        if 1 <= cx <= self.width and 1 <= cy <= self.logical_height:
+            # Determinamos a linha real do caractere e se estamos na metade superior ou inferior
+            char_row = (cy + 1) // 2
+            is_top = cy % 2 != 0
+
+            # Recuperamos ou inicializamos as cores da célula (superior, inferior)
+            cell_key = (char_row, cx)
+            if cell_key not in self.screen_buffer:
+                self.screen_buffer[cell_key] = [
+                    None,
+                    None,
+                ]  # None significa "transparente/fundo"
+
+            if is_top:
+                self.screen_buffer[cell_key][0] = self.fg_code
+            else:
+                self.screen_buffer[cell_key][1] = self.fg_code
+
+            c_top = self.screen_buffer[cell_key][0]
+            c_bottom = self.screen_buffer[cell_key][1]
+
+            # Lógica de renderização para preservar transparência e cores:
+            # Se apenas uma metade estiver pintada, usamos o caractere específico (▀ ou ▄)
+            # com fundo padrão (49) para não "manchar" a outra metade com Preto (30/40).
+            if c_top is not None and c_bottom is not None:
+                # Ambas preenchidas: usa ▀ com FG em cima e BG embaixo
+                fg = c_top
+                if ";1" in c_bottom:
+                    bg = c_bottom.replace("3", "10", 1).replace(";1", "")
+                else:
+                    bg = c_bottom.replace("3", "4", 1)
+                char = "▀"
+            elif c_top is not None:
+                # Só em cima: usa ▀ com fundo transparente
+                fg = c_top
+                bg = "49"
+                char = "▀"
+            else:  # c_bottom is not None
+                # Só embaixo: usa ▄ com fundo transparente
+                fg = c_bottom
+                bg = "49"
+                char = "▄"
+
+            sys.stdout.write(f"\033[{char_row};{cx}H\033[{fg};{bg}m{char}")
             sys.stdout.flush()
 
     def wait(self, seconds):

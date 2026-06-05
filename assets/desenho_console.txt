@@ -5,12 +5,13 @@
 # 1. Desenha uma estrela usando o modificador N (No-update)
 # Nota: Movimentos horizontais e diagonais são compensados
 C14
+BM -34,-1
 NU4 NR8 ND4 NL8
 NE5 NF5 NG5 NH5
 
 # 2. Move para o lado (Blind) para desenhar a segunda forma
 # Saltando 24 colunas para a direita e voltando 4 linhas para cima
-BM +14,-4
+BM +48,+5
 
 # 3. Desenha uma caixa ciano perfeitamente quadrada no terminal
 # Proporção utilizada: 4 linhas de altura por 8 colunas de largura
