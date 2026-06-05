@@ -6,7 +6,7 @@ from draw.renderers.console_renderer import ConsoleRenderer
 from draw.renderers.tkinter_renderer import TkinterRenderer
 
 
-def main():
+def parse_args():
     parser = argparse.ArgumentParser(description="Interpretador DRAW Unificado")
     parser.add_argument(
         "command", type=str, nargs="?", help="Executa uma string de comandos DRAW"
@@ -33,6 +33,12 @@ def main():
     if not (args.command or args.file or args.test):
         parser.print_help()
         sys.exit(0)
+
+    return args
+
+
+def main():
+    args = parse_args()
 
     if args.app == "c":
         renderer = ConsoleRenderer()
