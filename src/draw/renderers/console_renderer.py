@@ -71,8 +71,22 @@ class ConsoleRenderer:
         time.sleep(seconds)
 
     def wait_for_exit(self):
-        # Opcional: espera um enter para não fechar o terminal imediatamente se rodado fora de um shell persistente
-        pass
+        # Aguarda qualquer tecla para sair no console (Linux/macOS)
+        # Removida mensagem para não interferir no desenho visual
+
+        fd = sys.stdin.fileno()
+        if os.isatty(fd):
+            import tty
+            import termios
+
+            old_settings = termios.tcgetattr(fd)
+            try:
+                tty.setraw(sys.stdin.fileno())
+                sys.stdin.read(1)
+            finally:
+                termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+        else:
+            sys.stdin.read(1)
 
     def finalize(self):
         sys.stdout.write(f"\033[{self.height};1H\033[0m\n")

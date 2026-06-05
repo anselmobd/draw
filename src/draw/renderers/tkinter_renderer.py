@@ -47,6 +47,8 @@ class TkinterRenderer:
         time.sleep(seconds)
 
     def wait_for_exit(self):
+        # Fecha a janela ao pressionar qualquer tecla
+        self.root.bind("<Key>", lambda e: self.root.destroy())
         self.root.mainloop()
 
     def finalize(self):
