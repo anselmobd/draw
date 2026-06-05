@@ -1,6 +1,9 @@
 import argparse
 import sys
-from engine import DrawEngine, carregar_do_arquivo
+import tkinter as tk
+from draw.core.engine import DrawEngine, carregar_do_arquivo
+from draw.renderers.console_renderer import ConsoleRenderer
+from draw.renderers.tkinter_renderer import TkinterRenderer
 
 
 def main():
@@ -32,20 +35,20 @@ def main():
         sys.exit(0)
 
     if args.app == "c":
-        from cdraw import ConsoleRenderer
-
         renderer = ConsoleRenderer()
         # No console, o delay padrão costumava ser 20ms
-        delay = args.slow if args.slow != 0 or "-s" in sys.argv else 20
+        delay = (
+            args.slow
+            if args.slow != 0 or "-s" in sys.argv or "--slow" in sys.argv
+            else 20
+        )
         engine = DrawEngine(renderer, delay_ms=delay)
 
         if args.test:
             engine.execute("C4 U6 R12 D6 L12 BM +20,+2 C14 NU4 NR8 ND4 NL8")
-            carregar_do_arquivo("desenho_console.txt", engine)
+            # Tenta carregar arquivo de assets se existir
+            carregar_do_arquivo("assets/desenho_console.txt", engine)
     else:
-        import tkinter as tk
-        from gdraw import TkinterRenderer
-
         root = tk.Tk()
         root.title("Interpretador Clássico do Comando DRAW")
         canvas_width, canvas_height = 640, 480
@@ -56,7 +59,7 @@ def main():
 
         if args.test:
             engine.execute("C4 U40 R40 D40 L40 BM +60,+60 C14 TA45 U40 R40 D40 L40")
-            carregar_do_arquivo("desenho.txt", engine)
+            carregar_do_arquivo("assets/desenho.txt", engine)
 
     if args.command:
         engine.execute(args.command)

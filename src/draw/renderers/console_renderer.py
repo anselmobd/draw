@@ -1,8 +1,6 @@
-import argparse
 import os
 import sys
 import time
-from engine import DrawEngine, carregar_do_arquivo
 
 
 class ConsoleRenderer:

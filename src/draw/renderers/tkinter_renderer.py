@@ -1,8 +1,5 @@
-import argparse
-import sys
 import tkinter as tk
 import time
-from engine import DrawEngine, carregar_do_arquivo
 
 
 class TkinterRenderer:
