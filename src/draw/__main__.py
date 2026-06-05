@@ -1,6 +1,5 @@
 import argparse
 import sys
-import tkinter as tk
 from draw.core.engine import DrawEngine, carregar_do_arquivo
 from draw.renderers.console_renderer import ConsoleRenderer
 from draw.renderers.tkinter_renderer import TkinterRenderer
@@ -42,14 +41,8 @@ def main():
 
     if args.app == "c":
         renderer = ConsoleRenderer()
-
     else:
-        root = tk.Tk()
-        root.title("Interpretador Clássico do Comando DRAW")
-        canvas_width, canvas_height = 640, 480
-        canvas = tk.Canvas(root, width=canvas_width, height=canvas_height, bg="black")
-        canvas.pack()
-        renderer = TkinterRenderer(canvas, canvas_width, canvas_height)
+        renderer = TkinterRenderer()
 
     engine = DrawEngine(renderer, delay_ms=args.slow)
 
@@ -67,10 +60,8 @@ def main():
     if args.file:
         carregar_do_arquivo(args.file, engine)
 
-    if args.app == "c":
-        renderer.finalize()
-    else:
-        root.mainloop()
+    renderer.wait_for_exit()
+    renderer.finalize()
 
 
 if __name__ == "__main__":

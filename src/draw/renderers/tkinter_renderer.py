@@ -3,11 +3,15 @@ import time
 
 
 class TkinterRenderer:
-    def __init__(self, canvas, width, height):
-        self.canvas = canvas
-        self.root = canvas.winfo_toplevel()
+    def __init__(
+        self, title="Interpretador Clássico do Comando DRAW", width=640, height=480
+    ):
+        self.root = tk.Tk()
+        self.root.title(title)
         self.width = width
         self.height = height
+        self.canvas = tk.Canvas(self.root, width=width, height=height, bg="black")
+        self.canvas.pack()
         self.color_index = 15
         self.colors = {
             0: "black",
@@ -41,3 +45,9 @@ class TkinterRenderer:
     def wait(self, seconds):
         self.root.update()
         time.sleep(seconds)
+
+    def wait_for_exit(self):
+        self.root.mainloop()
+
+    def finalize(self):
+        pass

@@ -70,6 +70,10 @@ class ConsoleRenderer:
     def wait(self, seconds):
         time.sleep(seconds)
 
+    def wait_for_exit(self):
+        # Opcional: espera um enter para não fechar o terminal imediatamente se rodado fora de um shell persistente
+        pass
+
     def finalize(self):
         sys.stdout.write(f"\033[{self.height};1H\033[0m\n")
         sys.stdout.write("\033[?25h")
