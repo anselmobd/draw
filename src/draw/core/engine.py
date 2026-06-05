@@ -3,7 +3,6 @@ import re
 
 __all__ = [
     "DrawEngine",
-    "carregar_do_arquivo",
 ]
 
 
@@ -62,6 +61,20 @@ class DrawEngine:
             if self.delay > 0:
                 self.renderer.wait(self.delay)
 
+    def execute_file(self, file_path):
+        try:
+            with open(file_path, "r") as f:
+                content = " ".join(
+                    [
+                        line.strip()
+                        for line in f
+                        if line.strip() and not line.startswith("#")
+                    ]
+                )
+                self.execute(content)
+        except FileNotFoundError:
+            print(f"Erro: Arquivo '{file_path}' não encontrado.")
+
     def _move_command(self, cmd, arg, blind, noupdate):
         dist = float(arg) * (self.scale / 4.0) if arg and cmd != "M" else 0
 
@@ -108,18 +121,3 @@ class DrawEngine:
         if not noupdate:
             self.x = nx
             self.y = ny
-
-
-def carregar_do_arquivo(caminho_arquivo, engine):
-    try:
-        with open(caminho_arquivo, "r") as f:
-            conteudo = " ".join(
-                [
-                    linha.strip()
-                    for linha in f
-                    if linha.strip() and not linha.startswith("#")
-                ]
-            )
-            engine.execute(conteudo)
-    except FileNotFoundError:
-        print(f"Erro: Arquivo '{caminho_arquivo}' não encontrado.")

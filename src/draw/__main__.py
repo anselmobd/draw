@@ -1,6 +1,6 @@
 import argparse
 import sys
-from draw.core.engine import DrawEngine, carregar_do_arquivo
+from draw.core.engine import DrawEngine
 from draw.renderers.console_renderer import ConsoleRenderer
 from draw.renderers.tkinter_renderer import TkinterRenderer
 
@@ -49,16 +49,16 @@ def main():
     if args.test:
         if args.app == "c":
             engine.execute("C4 U6 R12 D6 L12 BM +20,+2 C14 NU4 NR8 ND4 NL8")
-            carregar_do_arquivo("assets/desenho_console.txt", engine)
+            engine.execute_file("assets/desenho_console.txt")
         else:
             engine.execute("C4 U40 R40 D40 L40 BM +60,+60 C14 TA45 U40 R40 D40 L40")
-            carregar_do_arquivo("assets/desenho.txt", engine)
+            engine.execute_file("assets/desenho.txt")
 
     if args.command:
         engine.execute(args.command)
 
     if args.file:
-        carregar_do_arquivo(args.file, engine)
+        engine.execute_file(args.file)
 
     renderer.wait_for_exit()
     renderer.finalize()
