@@ -11,18 +11,7 @@ O projeto utiliza uma arquitetura modular que separa a lógica de interpretaçã
 - **Modos Avançados:** Suporte a comandos `B` (Blind - mover sem desenhar) e `N` (No Update - desenhar sem mover o cursor).
 - **Controle de Velocidade:** Parâmetro `--slow` para visualizar o desenho passo a passo.
 
-## 📁 Estrutura do Projeto (Src Layout)
-
-```text
-draw/
-├── assets/                  # Arquivos de comandos DRAW (.txt)
-├── src/
-│   └── draw/                # Pacote principal Python
-│       ├── core/            # Motor de interpretação (Engine)
-│       └── renderers/       # Motores de renderização (GUI e Console)
-├── run.py                   # Script de inicialização (Launcher)
-└── pyproject.toml           # Configurações do ambiente
-```
+Para mais detalhes sobre a arquitetura do projeto e o funcionamento do motor de alta resolução para terminal, consulte os [Detalhes Técnicos](docs/technical_details.md).
 
 ## 🛠️ Como Usar
 
