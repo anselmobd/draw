@@ -1,3 +1,4 @@
+import argparse
 import math
 import os
 import re
@@ -6,13 +7,14 @@ import time
 
 
 class ConsoleDrawInterpreter:
-    def __init__(self):
+    def __init__(self, delay_ms=20):
         # DETECÇÃO DINÂMICA: Pega o tamanho real do terminal atual
         self.atualizar_tamanho_terminal()
 
         self.scale = 4
         self.angle = 0
         self.color_code = "37"  # Branco padrão ANSI
+        self.delay = delay_ms / 1000.0
 
         # Paleta de Cores ANSI mapeada a partir do clássico (Aproximado)
         # 30=Preto, 34=Azul, 32=Verde, 36=Ciano, 31=Vermelho, 35=Magenta, 33=Amarelo, 37=Branco
@@ -116,8 +118,9 @@ class ConsoleDrawInterpreter:
                 self.angle = float(arg) if arg else 0.0
 
             i += 1
-            # Pequena pausa opcional para ver o desenho sendo construído em "tempo real" como no MSX
-            time.sleep(0.02)
+            # Pausa para ver o desenho sendo construído
+            if self.delay > 0:
+                time.sleep(self.delay)
 
     def _move_command(self, cmd, arg, blind, noupdate):
         # Em modo texto, passos curtos (escala menor) funcionam melhor devido ao tamanho das letras
@@ -203,16 +206,42 @@ def carregar_do_arquivo(caminho_arquivo, interpretador):
 
 # --- Execução Principal ---
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Interpretador DRAW no Console")
+    parser.add_argument(
+        "command", type=str, nargs="?", help="Executa uma string de comandos DRAW"
+    )
+    parser.add_argument(
+        "-f", "--file", type=str, help="Executa comandos DRAW de um arquivo"
+    )
+    parser.add_argument(
+        "-t", "--test", action="store_true", help="Executa o teste padrão"
+    )
+    parser.add_argument(
+        "-s", "--slow", type=int, default=0, help="Atraso entre comandos (milisegundos)"
+    )
+
+    args = parser.parse_args()
+
+    # Se nenhum argumento for passado, mostra o help
+    if not (args.command or args.file or args.test):
+        parser.print_help()
+        sys.exit(0)
+
     # Inicializa o interpretador (ele vai detectar o tamanho sozinho)
-    interpreter = ConsoleDrawInterpreter()
+    interpreter = ConsoleDrawInterpreter(delay_ms=args.slow)
 
-    # IMPORTANTE: Como caracteres de texto são maiores que pixels, use distâncias menores!
-    # Desenha um quadrado vermelho (C4), pula posição (BM), faz uma cruz amarela (C14) com N (no-update)
-    string_terminal = "C4 U6 R12 D6 L12 BM +20,+2 C14 NU4 NR8 ND4 NL8"
-    interpreter.execute(string_terminal)
+    if args.test:
+        # IMPORTANTE: Como caracteres de texto são maiores que pixels, use distâncias menores!
+        # Desenha um quadrado vermelho (C4), pula posição (BM), faz uma cruz amarela (C14) com N (no-update)
+        string_terminal = "C4 U6 R12 D6 L12 BM +20,+2 C14 NU4 NR8 ND4 NL8"
+        interpreter.execute(string_terminal)
+        carregar_do_arquivo("desenho_console.txt", interpreter)
 
-    # Para ler de arquivo texto no terminal, descomente a linha abaixo:
-    carregar_do_arquivo("desenho_console.txt", interpreter)
+    if args.command:
+        interpreter.execute(args.command)
+
+    if args.file:
+        carregar_do_arquivo(args.file, interpreter)
 
     # Move o cursor para a última linha do terminal atualizado para não bagunçar o prompt
     sys.stdout.write(f"\033[{interpreter.height};1H\033[0m\n")

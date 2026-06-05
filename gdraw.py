@@ -1,18 +1,22 @@
+import argparse
 import math
 import re
+import sys
 import tkinter as tk
 from tkinter import messagebox
 
 
 class BasicDrawInterpreter:
-    def __init__(self, canvas, width=640, height=480):
+    def __init__(self, canvas, width=640, height=480, delay_ms=0.0):
         self.canvas = canvas
+        self.root = canvas.winfo_toplevel()
         # Inicializa o cursor no centro da tela (padrão do BASIC)
         self.x = width // 2
         self.y = height // 2
         self.scale = 4  # Escala padrão 4 (significa 1:1)
         self.angle = 0  # Ângulo em graus (usado pelo TA)
         self.color_index = 15  # Cor padrão (Branco no MSX/DOS clássico)
+        self.delay = delay_ms / 1000.0
 
         # Paleta de Cores Clássica (Simulando o padrão EGA de 16 cores)
         self.colors = {
@@ -84,6 +88,11 @@ class BasicDrawInterpreter:
                 self.angle = float(arg) if arg else 0.0
 
             i += 1
+            if self.delay > 0:
+                self.root.update()
+                import time
+
+                time.sleep(self.delay)
 
     def _move_command(self, cmd, arg, blind, noupdate):
         # Calcula a distância baseada na escala (passo real = n * (scale / 4))
@@ -167,6 +176,27 @@ def carregar_do_arquivo(caminho_arquivo, interpretador):
 
 # --- Inicialização da Interface Gráfica ---
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Interpretador DRAW Gráfico")
+    parser.add_argument(
+        "command", type=str, nargs="?", help="Executa uma string de comandos DRAW"
+    )
+    parser.add_argument(
+        "-f", "--file", type=str, help="Executa comandos DRAW de um arquivo"
+    )
+    parser.add_argument(
+        "-t", "--test", action="store_true", help="Executa o teste padrão"
+    )
+    parser.add_argument(
+        "-s", "--slow", type=int, default=0, help="Atraso entre comandos (milisegundos)"
+    )
+
+    args = parser.parse_args()
+
+    # Se nenhum argumento for passado, mostra o help
+    if not (args.command or args.file or args.test):
+        parser.print_help()
+        sys.exit(0)
+
     root = tk.Tk()
     root.title("Interpretador Clássico do Comando DRAW")
 
@@ -175,17 +205,21 @@ if __name__ == "__main__":
     canvas = tk.Canvas(root, width=canvas_width, height=canvas_height, bg="black")
     canvas.pack()
 
-    interpreter = BasicDrawInterpreter(canvas, canvas_width, canvas_height)
+    interpreter = BasicDrawInterpreter(
+        canvas, canvas_width, canvas_height, delay_ms=args.slow
+    )
 
-    # --- EXEMPLO DE USO 1: String Direta ---
-    # Desenha um quadrado vermelho (C4), salta de posição (BM), muda para amarelo (C14) e rotaciona em 45° (TA45)
-    string_teste = "C4 U40 R40 D40 L40 BM +60,+60 C14 TA45 U40 R40 D40 L40"
-    interpreter.execute(string_teste)
+    if args.test:
+        # --- EXEMPLO DE USO 1: String Direta ---
+        # Desenha um quadrado vermelho (C4), salta de posição (BM), muda para amarelo (C14) e rotaciona em 45° (TA45)
+        string_teste = "C4 U40 R40 D40 L40 BM +60,+60 C14 TA45 U40 R40 D40 L40"
+        interpreter.execute(string_teste)
+        carregar_do_arquivo("desenho.txt", interpreter)
 
-    # --- EXEMPLO DE USO 2: Lendo de um arquivo ---
-    # Descomente a linha abaixo para testar a leitura de arquivo.
-    # Crie um arquivo 'desenho.txt' na mesma pasta e coloque os comandos nele.
+    if args.command:
+        interpreter.execute(args.command)
 
-    carregar_do_arquivo("desenho.txt", interpreter)
+    if args.file:
+        carregar_do_arquivo(args.file, interpreter)
 
     root.mainloop()
