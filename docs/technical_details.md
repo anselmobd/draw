@@ -8,7 +8,7 @@ O projeto utiliza o **Bridge Pattern** para desacoplar a lógica de movimentaç�
 
 ### Componentes Core
 - **`DrawEngine`**: Responsável pelo processamento de tokens, tratamento de recursividade (prefixos B/N), transformações (escala/rotação) e gerenciamento de estado (posicionamento).
-- **`Renderer` (Interface)**: Define o contrato que qualquer motor de saída deve implementar (`draw_line`, `set_color`, `limpar_tela`, etc.).
+- **`Renderer` (Classe Base Abstrata)**: Localizada em `src/draw/renderers/base.py`, define o contrato rigoroso que qualquer motor de saída deve implementar utilizando o módulo `abc`. Isso facilita a criação de novos renderizadores (ex: SVG, Imagem estática, etc).
 
 ---
 

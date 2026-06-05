@@ -1,9 +1,10 @@
 import os
 import sys
 import time
+from draw.renderers.base import Renderer
 
 
-class ConsoleRenderer:
+class ConsoleRenderer(Renderer):
     def __init__(self):
         # No Windows, precisamos garantir que as sequências ANSI sejam processadas
         if os.name == "nt":

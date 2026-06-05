@@ -2,9 +2,10 @@ import tkinter as tk
 import time
 import json
 import os
+from draw.renderers.base import Renderer
 
 
-class TkinterRenderer:
+class TkinterRenderer(Renderer):
     def __init__(
         self, title="Interpretador Clássico do Comando DRAW", width=640, height=480
     ):
@@ -79,6 +80,9 @@ class TkinterRenderer:
 
     def set_color(self, index):
         self.color_index = index
+
+    def limpar_tela(self):
+        self.canvas.delete("all")
 
     def draw_line(self, x1, y1, x2, y2):
         color = self.colors.get(self.color_index, "white")
