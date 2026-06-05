@@ -6,12 +6,10 @@ import time
 
 
 class ConsoleDrawInterpreter:
-    def __init__(self, width=80, height=24):
-        self.width = width
-        self.height = height
-        # Centraliza o cursor na matriz de texto
-        self.x = width // 2
-        self.y = height // 2
+    def __init__(self):
+        # DETECÇÃO DINÂMICA: Pega o tamanho real do terminal atual
+        self.atualizar_tamanho_terminal()
+
         self.scale = 4
         self.angle = 0
         self.color_code = "37"  # Branco padrão ANSI
@@ -40,6 +38,21 @@ class ConsoleDrawInterpreter:
 
         self.limpar_tela()
 
+    def atualizar_tamanho_terminal(self):
+        try:
+            # Obtém as colunas (width) e linhas (height) atuais do console
+            tamanho = os.get_terminal_size()
+            self.width = tamanho.columns
+            self.height = tamanho.lines
+        except OSError:
+            # Valores de segurança caso o script seja rodado onde não há um terminal real
+            self.width = 80
+            self.height = 24
+
+        # Reposiciona o cursor no centro exato da tela detectada
+        self.x = self.width // 2
+        self.y = self.height // 2
+
     def limpar_tela(self):
         # Limpa o terminal usando comandos do sistema operacional
         os.system("cls" if os.name == "nt" else "clear")
@@ -54,6 +67,7 @@ class ConsoleDrawInterpreter:
         # Proteção para não desenhar fora dos limites físicos do terminal
         cx = int(round(x))
         cy = int(round(y))
+        # Agora valida o desenho usando os limites dinâmicos da tela
         if 1 <= cx <= self.width and 1 <= cy <= self.height:
             # Sequência ANSI: \033[Y;XH move o cursor para a linha Y, coluna X
             # \033[CORm define a cor do texto. O caractere '█' simula o pixel.
@@ -103,7 +117,7 @@ class ConsoleDrawInterpreter:
 
             i += 1
             # Pequena pausa opcional para ver o desenho sendo construído em "tempo real" como no MSX
-            time.sleep(0.03)
+            time.sleep(0.02)
 
     def _move_command(self, cmd, arg, blind, noupdate):
         # Em modo texto, passos curtos (escala menor) funcionam melhor devido ao tamanho das letras
@@ -187,10 +201,10 @@ def carregar_do_arquivo(caminho_arquivo, interpretador):
         print(f"Erro: Arquivo '{caminho_arquivo}' não encontrado.")
 
 
-# --- Execução no Console ---
+# --- Execução Principal ---
 if __name__ == "__main__":
-    # Define o tamanho padrão de uma tela de terminal antiga (80 colunas por 24 linhas)
-    interpreter = ConsoleDrawInterpreter(width=80, height=24)
+    # Inicializa o interpretador (ele vai detectar o tamanho sozinho)
+    interpreter = ConsoleDrawInterpreter()
 
     # IMPORTANTE: Como caracteres de texto são maiores que pixels, use distâncias menores!
     # Desenha um quadrado vermelho (C4), pula posição (BM), faz uma cruz amarela (C14) com N (no-update)
@@ -200,7 +214,7 @@ if __name__ == "__main__":
     # Para ler de arquivo texto no terminal, descomente a linha abaixo:
     carregar_do_arquivo("desenho_console.txt", interpreter)
 
-    # Posiciona o prompt lá embaixo no final da execução e restaura o cursor padrão
-    sys.stdout.write("\033[24;1H\033[0m\n")
-    sys.stdout.write("\033[?25h")
+    # Move o cursor para a última linha do terminal atualizado para não bagunçar o prompt
+    sys.stdout.write(f"\033[{interpreter.height};1H\033[0m\n")
+    sys.stdout.write("\033[?25h")  # Devolve o cursor piscante ao sistema
     sys.stdout.flush()
