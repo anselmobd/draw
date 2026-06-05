@@ -6,24 +6,26 @@ import time
 class ConsoleRenderer:
     def __init__(self):
         self.atualizar_tamanho_terminal()
-        self.color_code = "37"  # Branco padrão ANSI
+        self.fg_code = "37"  # Branco frontal padrão
+        self.bg_code = "40"  # Preto de fundo padrão
         self.colors = {
-            0: "30",
-            1: "34",
-            2: "32",
-            3: "36",
-            4: "31",
-            5: "35",
-            6: "33",
-            7: "37",
-            8: "30;1",
-            9: "34;1",
-            10: "32;1",
-            11: "36;1",
-            12: "31;1",
-            13: "35;1",
-            14: "33;1",
-            15: "37;1",
+            # Cores frontais (3x) e fundos (4x)
+            0: ("30", "40"),  # Preto
+            1: ("34", "44"),  # Azul
+            2: ("32", "42"),  # Verde
+            3: ("36", "46"),  # Ciano
+            4: ("31", "41"),  # Vermelho
+            5: ("35", "45"),  # Magenta
+            6: ("33", "43"),  # Marrom/Amarelo escuro
+            7: ("37", "47"),  # Cinza claro
+            8: ("30;1", "100"),  # Cinza escuro
+            9: ("34;1", "104"),  # Azul claro
+            10: ("32;1", "102"),  # Verde claro
+            11: ("36;1", "106"),  # Ciano claro
+            12: ("31;1", "101"),  # Vermelho claro
+            13: ("35;1", "105"),  # Magenta claro
+            14: ("33;1", "103"),  # Amarelo
+            15: ("37;1", "107"),  # Branco
         }
         self.limpar_tela()
 
@@ -45,7 +47,7 @@ class ConsoleRenderer:
         sys.stdout.flush()
 
     def set_color(self, index):
-        self.color_code = self.colors.get(index, "37")
+        self.fg_code, self.bg_code = self.colors.get(index, ("37", "40"))
 
     def draw_line(self, x1, y1, x2, y2):
         distance = max(abs(x2 - x1), abs(y2 - y1))
@@ -64,7 +66,8 @@ class ConsoleRenderer:
         cx = int(round(x))
         cy = int(round(y))
         if 1 <= cx <= self.width and 1 <= cy <= self.height:
-            sys.stdout.write(f"\033[{cy};{cx}H\033[{self.color_code}m█")
+            # \033[fg;bgm -> define cor frontal e fundo
+            sys.stdout.write(f"\033[{cy};{cx}H\033[{self.fg_code};{self.bg_code}m█")
             sys.stdout.flush()
 
     def wait(self, seconds):
