@@ -6,7 +6,10 @@ from draw.renderers.tkinter_renderer import TkinterRenderer
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(description="Interpretador DRAW Unificado")
+    parser = argparse.ArgumentParser(
+        description="Interpretador DRAW Unificado",
+        epilog="Nota: O programa aguarda o pressionamento de qualquer tecla para encerrar após o desenho.",
+    )
     parser.add_argument(
         "command", type=str, nargs="?", help="Executa uma string de comandos DRAW"
     )

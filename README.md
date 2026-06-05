@@ -48,6 +48,8 @@ python run.py "C4 U40 R40 D40 L40"
 python run.py -f assets/desenho.txt
 ```
 
+> **Nota:** Após a execução do desenho, o programa aguardará que você pressione **qualquer tecla** para encerrar (fechar a janela ou retornar ao prompt). No console, nenhuma mensagem é exibida para não interferir no visual do desenho.
+
 ### Argumentos
 - `command` (posicional): Uma string contendo comandos DRAW para execução direta.
 - `-a, --app {g,c}`: Seleciona o renderizador (g = gráfico, c = console).
