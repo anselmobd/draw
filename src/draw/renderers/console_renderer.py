@@ -5,6 +5,10 @@ import time
 
 class ConsoleRenderer:
     def __init__(self):
+        # No Windows, precisamos garantir que as sequências ANSI sejam processadas
+        if os.name == "nt":
+            os.system("")
+
         self.atualizar_tamanho_terminal()
         self.fg_code = "37"  # Branco frontal padrão
         self.bg_code = "40"  # Preto de fundo padrão
@@ -121,22 +125,27 @@ class ConsoleRenderer:
         time.sleep(seconds)
 
     def wait_for_exit(self):
-        # Aguarda qualquer tecla para sair no console (Linux/macOS)
+        # Aguarda qualquer tecla para sair no console
         # Removida mensagem para não interferir no desenho visual
 
-        fd = sys.stdin.fileno()
-        if os.isatty(fd):
-            import tty
-            import termios
+        if os.name == "nt":
+            import msvcrt
 
-            old_settings = termios.tcgetattr(fd)
-            try:
-                tty.setraw(sys.stdin.fileno())
-                sys.stdin.read(1)
-            finally:
-                termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+            msvcrt.getch()
         else:
-            sys.stdin.read(1)
+            fd = sys.stdin.fileno()
+            if os.isatty(fd):
+                import tty
+                import termios
+
+                old_settings = termios.tcgetattr(fd)
+                try:
+                    tty.setraw(sys.stdin.fileno())
+                    sys.stdin.read(1)
+                finally:
+                    termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+            else:
+                sys.stdin.read(1)
 
     def finalize(self):
         sys.stdout.write(f"\033[{self.height};1H\033[0m\n")

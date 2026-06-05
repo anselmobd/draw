@@ -61,7 +61,16 @@ Para que o sistema de cores 0-15 funcione em ambos os modos:
 
 ---
 
-## ⌨️ Entrada Não-Bloqueante
-Para implementar a funcionalidade "pressione qualquer tecla para sair" sem poluir o desenho no console, utilizamos:
-- **Linux/macOS**: Módulo `termios` para colocar o terminal em modo *raw* temporariamente.
-- **Windows**: Fallback para `msvcrt` ou `pause`.
+## ⌨️ Entrada Não-Bloqueante e Compatibilidade Windows
+
+Para implementar a funcionalidade `wait_for_exit` ("pressione qualquer tecla para sair") sem poluir o desenho no console e garantir o funcionamento em diferentes sistemas, adotamos as seguintes decisões:
+
+- **Windows (`os.name == "nt"`)**: 
+    - Utilizamos o módulo nativo `msvcrt` com a função `getch()`. Diferente do `input()` padrão, o `getch()` captura o código da tecla imediatamente sem ecoar o caractere na tela e sem exigir que o usuário pressione *Enter*.
+    - Na inicialização, executamos `os.system('')`. Este comando vazio é um gatilho documentado para que o terminal do Windows habilite o suporte nativo a sequências de escape ANSI (VT100), permitindo cores e posicionamento de cursor sem dependências externas como `colorama`.
+
+- **Linux/macOS (`posix`)**: 
+    - Utilizamos os módulos `termios` e `tty` para manipular os atributos do descritor de arquivo do `stdin`. 
+    - O terminal é colocado em **modo raw** temporariamente. Isso desativa o processamento de linha do sistema operacional (como o buffer que espera pelo *Enter* e o eco dos caracteres), permitindo a leitura de um único byte via `sys.stdin.read(1)`. Ao final, as configurações originais do terminal são restauradas para não quebrar a experiência do usuário no shell.
+
+Essas abordagens garantem que o encerramento do programa seja intuitivo e "limpo", respeitando o visual gerado pelo desenho.
