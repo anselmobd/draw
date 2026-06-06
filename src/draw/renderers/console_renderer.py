@@ -64,17 +64,30 @@ class ConsoleRenderer(Renderer):
         self.fg_code, self.bg_code = self.colors.get(index, ("37", "40"))
 
     def draw_line(self, x1, y1, x2, y2):
-        distance = max(abs(x2 - x1), abs(y2 - y1))
-        if distance == 0:
-            self._plot(x1, y1)
-        else:
-            x_inc = (x2 - x1) / distance
-            y_inc = (y2 - y1) / distance
-            cx, cy = x1, y1
-            for _ in range(int(round(distance)) + 1):
-                self._plot(cx, cy)
-                cx += x_inc
-                cy += y_inc
+        # Algoritmo de Bresenham para garantir linhas simétricas e sem gaps
+        # Trabalhamos diretamente no grid discreto (pixels)
+        x1_i, y1_i = int(x1 + 0.5), int(y1 + 0.5)
+        x2_i, y2_i = int(x2 + 0.5), int(y2 + 0.5)
+
+        dx = abs(x2_i - x1_i)
+        dy = abs(y2_i - y1_i)
+        sx = 1 if x1_i < x2_i else -1
+        sy = 1 if y1_i < y2_i else -1
+        err = dx - dy
+
+        curr_x, curr_y = x1_i, y1_i
+
+        while True:
+            self._plot(curr_x, curr_y)
+            if curr_x == x2_i and curr_y == y2_i:
+                break
+            e2 = 2 * err
+            if e2 > -dy:
+                err -= dy
+                curr_x += sx
+            if e2 < dx:
+                err += dx
+                curr_y += sy
 
     def _plot(self, x, y):
         cx = int(round(x))
