@@ -136,13 +136,19 @@ class ConsoleRenderer(Renderer):
             # Se apenas uma metade estiver pintada, usamos o caractere específico (▀ ou ▄)
             # com fundo padrão (49) para não "manchar" a outra metade com Preto (30/40).
             if c_top is not None and c_bottom is not None:
-                # Ambas preenchidas: usa ▀ com FG em cima e BG embaixo
-                fg = c_top
-                if ";1" in c_bottom:
-                    bg = c_bottom.replace("3", "10", 1).replace(";1", "")
+                if c_top == c_bottom:
+                    # Ambas com a mesma cor: usa o caractere de bloco cheio
+                    fg = c_top
+                    bg = "49"
+                    char = "█"
                 else:
-                    bg = c_bottom.replace("3", "4", 1)
-                char = "▀"
+                    # Ambas preenchidas com cores diferentes: usa ▀ com FG em cima e BG embaixo
+                    fg = c_top
+                    if ";1" in c_bottom:
+                        bg = c_bottom.replace("3", "10", 1).replace(";1", "")
+                    else:
+                        bg = c_bottom.replace("3", "4", 1)
+                    char = "▀"
             elif c_top is not None:
                 # Só em cima: usa ▀ com fundo transparente
                 fg = c_top
