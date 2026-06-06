@@ -16,10 +16,10 @@ Certifique-se de estar com o ambiente virtual ativado:
 source .venv/bin/activate
 ```
 
-Para executar todos os testes:
+Para executar todos os testes (graças à configuração no `pyproject.toml`):
 
 ```bash
-PYTHONPATH=src python -m pytest
+python -m pytest
 ```
 
 ### Opções Úteis do Pytest
