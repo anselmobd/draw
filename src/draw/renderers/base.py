@@ -5,6 +5,11 @@ class Renderer(ABC):
     def __init__(self, pixel_size=(1, 1)):
         self.window_mode = "normal"  # "normal", "fullscreen", "maximized"
         self.pixel_size = pixel_size  # (width, height) base para cada "pixel" lógico
+        self.on_resize_callback = None
+
+    def set_on_resize(self, callback):
+        """Define o callback a ser chamado em caso de redimensionamento."""
+        self.on_resize_callback = callback
 
     @abstractmethod
     def get_start_pos(self) -> tuple[int, int]:
