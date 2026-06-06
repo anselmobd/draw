@@ -32,6 +32,10 @@ class DrawEngine:
 
         i = 0
         while i < len(tokens) and current_run_id == self._run_id:
+            if not self.renderer.is_alive():
+                self.stop()
+                break
+                
             token = tokens[i].upper().strip()
 
             # ... (Lógica de prefixos B/N)

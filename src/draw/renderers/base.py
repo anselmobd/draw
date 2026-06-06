@@ -11,6 +11,10 @@ class Renderer(ABC):
         """Define o callback a ser chamado em caso de redimensionamento."""
         self.on_resize_callback = callback
 
+    def is_alive(self) -> bool:
+        """Retorna se o renderizador ainda está ativo para desenho."""
+        return True
+
     @abstractmethod
     def get_start_pos(self) -> tuple[int, int]:
         """Retorna a posição (x, y) inicial para o desenho."""

@@ -22,6 +22,7 @@ class TkinterRenderer(Renderer):
         if headless:
             self.root.withdraw()
         self.root.title(title)
+        self.alive = True
 
         # Aplica o modo de janela antes de carregar posição salva
         if self.window_mode == "fullscreen":
@@ -98,8 +99,11 @@ class TkinterRenderer(Renderer):
         self._resize_timer = self.root.after(100, self._trigger_resize)
 
     def _trigger_resize(self):
-        if self.on_resize_callback:
+        if self.on_resize_callback and self.alive:
             self.on_resize_callback()
+
+    def is_alive(self) -> bool:
+        return self.alive
 
     def get_start_pos(self):
         w, h = self.get_resolution()
@@ -155,23 +159,28 @@ class TkinterRenderer(Renderer):
         self.canvas.delete("all")
 
     def draw_line(self, x1, y1, x2, y2):
+        if not self.alive:
+            return
         color = self.colors.get(self.color_index, "white")
         pw, ph = self.pixel_size
 
         # Se o pixel for 1x1, usamos a linha padrão (mais eficiente)
         if pw == 1 and ph == 1:
-            # Usamos capstyle=PROJECTING para garantir que os pixels de extremidade sejam pintados
-            # em linhas de 1 pixel de largura, evitando gaps em vértices de diagonais.
-            self.canvas.create_line(
-                x1, y1, x2, y2, fill=color, width=1, capstyle=tk.PROJECTING
-            )
+            try:
+                # Usamos capstyle=PROJECTING para garantir que os pixels de extremidade sejam pintados
+                # em linhas de 1 pixel de largura, evitando gaps em vértices de diagonais.
+                self.canvas.create_line(
+                    x1, y1, x2, y2, fill=color, width=1, capstyle=tk.PROJECTING
+                )
+            except tk.TclError:
+                self.alive = False
             return
 
         # Para pixels maiores, simulamos a linha desenhando "blocos" ao longo da trajetória
         # usando Bresenham para consistência com o motor.
         x1_i, y1_i = int(math.floor(x1 + 0.5)), int(math.floor(y1 + 0.5))
         x2_i, y2_i = int(math.floor(x2 + 0.5)), int(math.floor(y2 + 0.5))
-
+        
         dx = abs(x2_i - x1_i)
         dy = abs(y2_i - y1_i)
         sx = 1 if x1_i < x2_i else -1
@@ -179,12 +188,16 @@ class TkinterRenderer(Renderer):
         err = dx - dy
 
         cx, cy = x1_i, y1_i
-        while True:
-            # Desenha o "pixel gigante"
-            # (cx, cy) são as coordenadas lógicas. Multiplicamos pelo tamanho do pixel.
-            self.canvas.create_rectangle(
-                cx * pw, cy * ph, (cx + 1) * pw, (cy + 1) * ph, fill=color, outline=""
-            )
+        while self.alive:
+            try:
+                # Desenha o "pixel gigante"
+                # (cx, cy) são as coordenadas lógicas. Multiplicamos pelo tamanho do pixel.
+                self.canvas.create_rectangle(
+                    cx * pw, cy * ph, (cx + 1) * pw, (cy + 1) * ph, fill=color, outline=""
+                )
+            except tk.TclError:
+                self.alive = False
+                break
 
             if cx == x2_i and cy == y2_i:
                 break
@@ -197,18 +210,33 @@ class TkinterRenderer(Renderer):
                 cy += sy
 
     def wait(self, seconds):
-        self.root.update()
-        time.sleep(seconds)
+        if not self.alive:
+            return
+        try:
+            self.root.update()
+            time.sleep(seconds)
+        except tk.TclError:
+            self.alive = False
 
     def wait_for_exit(self):
         # Fecha a janela ao pressionar qualquer tecla
-        def on_exit(event=None):
+        if not self.alive:
+            return
+            
+        try:
+            self.root.protocol("WM_DELETE_WINDOW", self._on_exit)
+            self.root.bind("<Key>", self._on_exit)
+            self.root.mainloop()
+        except tk.TclError:
+            self.alive = False
+
+    def _on_exit(self, event=None):
+        if self.alive:
+            self.alive = False
             self._save_window_state()
-            self.root.destroy()
-
-        self.root.protocol("WM_DELETE_WINDOW", on_exit)
-        self.root.bind("<Key>", on_exit)
-        self.root.mainloop()
-
+            try:
+                self.root.destroy()
+            except tk.TclError:
+                pass
     def finalize(self):
         pass
