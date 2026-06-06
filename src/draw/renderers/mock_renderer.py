@@ -2,7 +2,15 @@ from draw.renderers.base import Renderer
 
 
 class MockRenderer(Renderer):
-    def __init__(self, width=800, height=600, verbose=False, is_discrete=False):
+    def __init__(
+        self,
+        width=800,
+        height=600,
+        verbose=False,
+        is_discrete=False,
+        pixel_size=(1, 1),
+    ):
+        super().__init__(pixel_size=pixel_size)
         self.width = width
         self.height = height
         self.verbose = verbose

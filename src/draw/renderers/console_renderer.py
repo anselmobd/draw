@@ -5,11 +5,12 @@ from draw.renderers.base import Renderer
 
 
 class ConsoleRenderer(Renderer):
-    def __init__(self, headless=False):
+    def __init__(self, headless=False, pixel_size=(1, 1)):
         # No Windows, precisamos garantir que as sequências ANSI sejam processadas
         if os.name == "nt":
             os.system("")
 
+        super().__init__(pixel_size=pixel_size)
         self.atualizar_tamanho_terminal()
         self.fg_code = "37"  # Branco frontal padrão
         self.bg_code = "40"  # Preto de fundo padrão
@@ -37,10 +38,12 @@ class ConsoleRenderer(Renderer):
             self.limpar_tela()
 
     def get_start_pos(self):
-        return self.width // 2, self.logical_height // 2
+        w, h = self.get_resolution()
+        return w // 2, h // 2
 
     def get_resolution(self):
-        return self.width, self.logical_height
+        pw, ph = self.pixel_size
+        return self.width // pw, self.logical_height // ph
 
     def atualizar_tamanho_terminal(self):
         try:
@@ -96,7 +99,14 @@ class ConsoleRenderer(Renderer):
     def _plot(self, x, y):
         # x e y aqui já são inteiros vindos do Bresenham.
         cx, cy = int(x), int(y)
+        pw, ph = self.pixel_size
 
+        # Se houver escala de pixel, desenhamos múltiplos sub-pixels no grid ANSI
+        for py in range(ph):
+            for px in range(pw):
+                self._plot_single(cx * pw + px, cy * ph + py)
+
+    def _plot_single(self, cx, cy):
         if 1 <= cx <= self.width and 1 <= cy <= self.logical_height:
             # Algoritmo de mapeamento para sub-pixel ANSI:
             # Cada célula do terminal (row) tem 2 pixels verticais.

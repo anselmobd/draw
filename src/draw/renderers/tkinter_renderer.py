@@ -13,8 +13,9 @@ class TkinterRenderer(Renderer):
         height=480,
         window_mode="normal",
         headless=False,
+        pixel_size=(1, 1),
     ):
-        super().__init__()
+        super().__init__(pixel_size=pixel_size)
         self.window_mode = window_mode
         self.root = tk.Tk()
         if headless:
@@ -73,10 +74,12 @@ class TkinterRenderer(Renderer):
         }
 
     def get_start_pos(self):
-        return self.width // 2, self.height // 2
+        w, h = self.get_resolution()
+        return w // 2, h // 2
 
     def get_resolution(self):
-        return self.width, self.height
+        pw, ph = self.pixel_size
+        return self.width // pw, self.height // ph
 
     @property
     def is_discrete(self) -> bool:
@@ -125,11 +128,44 @@ class TkinterRenderer(Renderer):
 
     def draw_line(self, x1, y1, x2, y2):
         color = self.colors.get(self.color_index, "white")
-        # Usamos capstyle=PROJECTING para garantir que os pixels de extremidade sejam pintados
-        # em linhas de 1 pixel de largura, evitando gaps em vértices de diagonais.
-        self.canvas.create_line(
-            x1, y1, x2, y2, fill=color, width=1, capstyle=tk.PROJECTING
-        )
+        pw, ph = self.pixel_size
+
+        # Se o pixel for 1x1, usamos a linha padrão (mais eficiente)
+        if pw == 1 and ph == 1:
+            # Usamos capstyle=PROJECTING para garantir que os pixels de extremidade sejam pintados
+            # em linhas de 1 pixel de largura, evitando gaps em vértices de diagonais.
+            self.canvas.create_line(
+                x1, y1, x2, y2, fill=color, width=1, capstyle=tk.PROJECTING
+            )
+            return
+
+        # Para pixels maiores, simulamos a linha desenhando "blocos" ao longo da trajetória
+        # usando Bresenham para consistência com o motor.
+        dx = abs(int(x2) - int(x1))
+        dy = abs(int(y2) - int(y1))
+        sx = 1 if x1 < x2 else -1
+        sy = 1 if y1 < y2 else -1
+        err = dx - dy
+
+        cx, cy = int(x1), int(y1)
+        x2_i, y2_i = int(x2), int(y2)
+
+        while True:
+            # Desenha o "pixel gigante"
+            # (cx, cy) são as coordenadas lógicas. Multiplicamos pelo tamanho do pixel.
+            self.canvas.create_rectangle(
+                cx * pw, cy * ph, (cx + 1) * pw, (cy + 1) * ph, fill=color, outline=""
+            )
+
+            if cx == x2_i and cy == y2_i:
+                break
+            e2 = 2 * err
+            if e2 > -dy:
+                err -= dy
+                cx += sx
+            if e2 < dx:
+                err += dx
+                cy += sy
 
     def wait(self, seconds):
         self.root.update()

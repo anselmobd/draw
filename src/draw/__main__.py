@@ -45,6 +45,13 @@ def parse_args():
     parser.add_argument(
         "-M", "--maximize", action="store_true", help="Abre a janela gráfica maximizada"
     )
+    parser.add_argument(
+        "-p",
+        "--pixel-size",
+        type=str,
+        default="1x1",
+        help="Tamanho do pixel (ex: 2 ou 2x3)",
+    )
 
     args = parser.parse_args()
 
@@ -58,6 +65,18 @@ def parse_args():
 def main():
     args = parse_args()
 
+    # Processa o tamanho do pixel
+    try:
+        if "x" in args.pixel_size:
+            w_p, h_p = map(int, args.pixel_size.split("x"))
+            pixel_size = (w_p, h_p)
+        else:
+            p = int(args.pixel_size)
+            pixel_size = (p, p)
+    except ValueError:
+        print(f"Erro: Formato de pixel inválido '{args.pixel_size}'. Use '2' ou '2x3'.")
+        sys.exit(1)
+
     # Define o modo de janela para o renderer de GUI
     window_mode = "normal"
     if args.fullscreen:
@@ -66,14 +85,20 @@ def main():
         window_mode = "maximized"
 
     if args.app == "c":
-        renderer = ConsoleRenderer(headless=args.mock)
+        renderer = ConsoleRenderer(headless=args.mock, pixel_size=pixel_size)
     else:
-        renderer = TkinterRenderer(window_mode=window_mode, headless=args.mock)
+        renderer = TkinterRenderer(
+            window_mode=window_mode, headless=args.mock, pixel_size=pixel_size
+        )
 
     if args.mock:
         w, h = renderer.get_resolution()
         renderer = MockRenderer(
-            width=w, height=h, verbose=True, is_discrete=renderer.is_discrete
+            width=w,
+            height=h,
+            verbose=True,
+            is_discrete=renderer.is_discrete,
+            pixel_size=pixel_size,
         )
 
     engine = DrawEngine(renderer, delay_ms=args.slow)

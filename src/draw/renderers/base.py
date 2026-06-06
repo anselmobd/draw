@@ -2,8 +2,9 @@ from abc import ABC, abstractmethod
 
 
 class Renderer(ABC):
-    def __init__(self):
+    def __init__(self, pixel_size=(1, 1)):
         self.window_mode = "normal"  # "normal", "fullscreen", "maximized"
+        self.pixel_size = pixel_size  # (width, height) base para cada "pixel" lógico
 
     @abstractmethod
     def get_start_pos(self) -> tuple[int, int]:
