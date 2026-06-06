@@ -62,10 +62,11 @@ class ConsoleRenderer(Renderer):
         return True
 
     def limpar_tela(self):
+        # Limpa o buffer interno para não sobrar pixels de desenhos anteriores
+        self.screen_buffer = {}
         os.system("cls" if os.name == "nt" else "clear")
         sys.stdout.write("\033[?25l")
         sys.stdout.flush()
-        self.screen_buffer = {}
 
     def set_color(self, index):
         self.fg_code, self.bg_code = self.colors.get(index, ("37", "40"))
