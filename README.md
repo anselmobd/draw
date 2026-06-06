@@ -69,3 +69,8 @@ Consulte o [Manual do Usuário](docs/user_manual.md) para a lista completa e det
 | **TA n** | Rotaciona em um ângulo específico (0-359). |
 | **B** | Prefixo para mover sem desenhar. |
 | **N** | Prefixo para desenhar sem atualizar a posição final. |
+
+## 📄 Licença
+
+Este projeto está licenciado sob a licença **BSD 3-Clause** - veja o arquivo [LICENSE](LICENSE) para detalhes.
+
