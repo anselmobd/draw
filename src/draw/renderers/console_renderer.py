@@ -5,7 +5,7 @@ from draw.renderers.base import Renderer
 
 
 class ConsoleRenderer(Renderer):
-    def __init__(self):
+    def __init__(self, headless=False):
         # No Windows, precisamos garantir que as sequências ANSI sejam processadas
         if os.name == "nt":
             os.system("")
@@ -33,7 +33,8 @@ class ConsoleRenderer(Renderer):
             14: ("33;1", "103"),  # Amarelo
             15: ("37;1", "107"),  # Branco
         }
-        self.limpar_tela()
+        if not headless:
+            self.limpar_tela()
 
     def get_start_pos(self):
         return self.width // 2, self.logical_height // 2

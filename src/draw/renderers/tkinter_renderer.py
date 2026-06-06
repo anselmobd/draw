@@ -12,10 +12,13 @@ class TkinterRenderer(Renderer):
         width=640,
         height=480,
         window_mode="normal",
+        headless=False,
     ):
         super().__init__()
         self.window_mode = window_mode
         self.root = tk.Tk()
+        if headless:
+            self.root.withdraw()
         self.root.title(title)
 
         # Aplica o modo de janela antes de carregar posição salva
