@@ -115,16 +115,18 @@ class DrawEngine:
         self._do_draw(self.x + dx, self.y + dy, blind, noupdate)
 
     def _do_draw(self, nx, ny, blind, noupdate):
+        target_x, target_y = nx, ny
+
+        # Em renderizadores que trabalham com grid discreto (ex: Console, Tkinter),
+        # arredondar as coordenadas antes de desenhar garante que os renderizadores
+        # recebam pontos exatos, evitando gaps em vértices e mantendo a simetria.
+        if self.renderer.is_discrete:
+            target_x = float(int(nx + 0.5))
+            target_y = float(int(ny + 0.5))
+
         if not blind:
-            self.renderer.draw_line(self.x, self.y, nx, ny)
+            self.renderer.draw_line(self.x, self.y, target_x, target_y)
 
         if not noupdate:
-            # Em renderizadores que trabalham com grid discreto (ex: Console, Tkinter),
-            # arredondar a posição interna evita a acumulação de erros de ponto flutuante
-            # que quebram a simetria de desenhos geométricos (especialmente em 45°).
-            if self.renderer.is_discrete:
-                self.x = float(int(nx + 0.5))
-                self.y = float(int(ny + 0.5))
-            else:
-                self.x = nx
-                self.y = ny
+            self.x = target_x
+            self.y = target_y

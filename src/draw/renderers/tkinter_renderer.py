@@ -125,7 +125,11 @@ class TkinterRenderer(Renderer):
 
     def draw_line(self, x1, y1, x2, y2):
         color = self.colors.get(self.color_index, "white")
-        self.canvas.create_line(x1, y1, x2, y2, fill=color, width=1)
+        # Usamos capstyle=PROJECTING para garantir que os pixels de extremidade sejam pintados
+        # em linhas de 1 pixel de largura, evitando gaps em vértices de diagonais.
+        self.canvas.create_line(
+            x1, y1, x2, y2, fill=color, width=1, capstyle=tk.PROJECTING
+        )
 
     def wait(self, seconds):
         self.root.update()
