@@ -7,19 +7,48 @@ from draw.renderers.base import Renderer
 
 class TkinterRenderer(Renderer):
     def __init__(
-        self, title="Interpretador Clássico do Comando DRAW", width=640, height=480
+        self,
+        title="Interpretador Clássico do Comando DRAW",
+        width=640,
+        height=480,
+        window_mode="normal",
     ):
+        super().__init__()
+        self.window_mode = window_mode
         self.root = tk.Tk()
         self.root.title(title)
+
+        # Aplica o modo de janela antes de carregar posição salva
+        if self.window_mode == "fullscreen":
+            self.root.attributes("-fullscreen", True)
+        elif self.window_mode == "maximized":
+            if os.name == "nt":
+                self.root.state("zoomed")
+            else:
+                self.root.attributes("-zoomed", True)
+
         self.width = width
         self.height = height
 
+        # Se estiver em tela cheia, atualizamos a largura e altura para as do monitor
+        if self.window_mode in ["fullscreen", "maximized"]:
+            self.root.update()  # Garante que as dimensões foram aplicadas
+            self.width = self.root.winfo_width()
+            self.height = self.root.winfo_height()
+
         # Arquivo para salvar o estado da janela
         self.config_file = os.path.join(os.getcwd(), ".draw_config.json")
-        self._load_window_state()
+        if self.window_mode == "normal":
+            self._load_window_state()
 
-        self.canvas = tk.Canvas(self.root, width=width, height=height, bg="black")
-        self.canvas.pack()
+        self.canvas = tk.Canvas(
+            self.root,
+            width=self.width,
+            height=self.height,
+            bg="black",
+            highlightthickness=0,
+        )
+        self.canvas.pack(fill="both", expand=True)
         self.color_index = 15
         self.colors = {
             0: "black",

@@ -39,14 +39,18 @@ Implementada a base para testes de regressão da lógica do interpretador.
 - **Resultado:** Criado o `MockRenderer` e conjunto inicial de testes em `tests/test_engine.py` cobrindo movimentos, transformações e estados da Engine.
 - **Documentação:** [Guia de Testes](testing.md).
 
+### 2. Modos de Janela (Tkinter)
+Adicionado suporte para diferentes estados de exibição da janela gráfica via CLI.
+- **Resultado:** Implementadas as flags `--fullscreen` (-F) e `--maximize` (-M). O canvas agora se ajusta automaticamente à resolução do monitor ou área maximizada, garantindo desenhos centralizados em qualquer escala.
+
 ---
 
 ## 🎨 Experiência do Usuário (UX)
 
-### 7. Interface CLI Interativa (REPL)
+### 6. Interface CLI Interativa (REPL)
 Permitir que o usuário digite comandos um a um e veja o resultado imediatamente.
 - **Ideia:** Criar uma casca interativa onde cada linha de comando DRAW digitada é enviada para o Renderer aberto em tempo real.
 
-### 8. Documentação Automática de Comandos
+### 7. Documentação Automática de Comandos
 Gerar uma referência rápida formatada a partir das docstrings dos métodos da `DrawEngine`.
 - **Ideia:** Facilitar para que o usuário saiba quais comandos estão disponíveis e qual a sintaxe exata de cada um sem precisar ler o código.

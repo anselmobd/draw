@@ -2,6 +2,9 @@ from abc import ABC, abstractmethod
 
 
 class Renderer(ABC):
+    def __init__(self):
+        self.window_mode = "normal"  # "normal", "fullscreen", "maximized"
+
     @abstractmethod
     def get_start_pos(self) -> tuple[int, int]:
         """Retorna a posição (x, y) inicial para o desenho."""

@@ -29,6 +29,15 @@ def parse_args():
         default="g",
         help="Escolha a apresentação: g (gráfico, padrão) ou c (console)",
     )
+    parser.add_argument(
+        "-F",
+        "--fullscreen",
+        action="store_true",
+        help="Abre a janela gráfica em modo tela cheia",
+    )
+    parser.add_argument(
+        "-M", "--maximize", action="store_true", help="Abre a janela gráfica maximizada"
+    )
 
     args = parser.parse_args()
 
@@ -42,10 +51,17 @@ def parse_args():
 def main():
     args = parse_args()
 
+    # Define o modo de janela para o renderer de GUI
+    window_mode = "normal"
+    if args.fullscreen:
+        window_mode = "fullscreen"
+    elif args.maximize:
+        window_mode = "maximized"
+
     if args.app == "c":
         renderer = ConsoleRenderer()
     else:
-        renderer = TkinterRenderer()
+        renderer = TkinterRenderer(window_mode=window_mode)
 
     engine = DrawEngine(renderer, delay_ms=args.slow)
 
