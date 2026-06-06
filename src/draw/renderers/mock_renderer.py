@@ -2,13 +2,18 @@ from draw.renderers.base import Renderer
 
 
 class MockRenderer(Renderer):
-    def __init__(self, width=800, height=600, verbose=False):
+    def __init__(self, width=800, height=600, verbose=False, is_discrete=False):
         self.width = width
         self.height = height
         self.verbose = verbose
+        self._is_discrete = is_discrete
         self.lines = []  # Lista de tuplas ((x1, y1), (x2, y2), color_index)
         self.color_index = 15
         self.history = []  # Log de operações para auditoria detalhada
+
+    @property
+    def is_discrete(self):
+        return self._is_discrete
 
     def get_start_pos(self):
         return self.width // 2, self.height // 2

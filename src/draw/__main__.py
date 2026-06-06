@@ -72,7 +72,9 @@ def main():
 
     if args.mock:
         w, h = renderer.get_resolution()
-        renderer = MockRenderer(width=w, height=h, verbose=True)
+        renderer = MockRenderer(
+            width=w, height=h, verbose=True, is_discrete=renderer.is_discrete
+        )
 
     engine = DrawEngine(renderer, delay_ms=args.slow)
 

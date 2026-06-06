@@ -78,6 +78,10 @@ class TkinterRenderer(Renderer):
     def get_resolution(self):
         return self.width, self.height
 
+    @property
+    def is_discrete(self) -> bool:
+        return True
+
     def _load_window_state(self):
         """Carrega a posição da janela do arquivo de configuração e valida se está visível."""
         if os.path.exists(self.config_file):

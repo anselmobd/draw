@@ -54,6 +54,10 @@ class ConsoleRenderer(Renderer):
         # Cada célula do terminal tem 2 "pixels" verticais (usando ▀)
         self.logical_height = self.height * 2
 
+    @property
+    def is_discrete(self) -> bool:
+        return True
+
     def limpar_tela(self):
         os.system("cls" if os.name == "nt" else "clear")
         sys.stdout.write("\033[?25l")
@@ -90,15 +94,18 @@ class ConsoleRenderer(Renderer):
                 curr_y += sy
 
     def _plot(self, x, y):
-        cx = int(round(x))
-        cy = int(round(y))
+        # x e y aqui já são inteiros vindos do Bresenham.
+        cx, cy = int(x), int(y)
 
         if 1 <= cx <= self.width and 1 <= cy <= self.logical_height:
-            # Determinamos a linha real do caractere e se estamos na metade superior ou inferior
+            # Algoritmo de mapeamento para sub-pixel ANSI:
+            # Cada célula do terminal (row) tem 2 pixels verticais.
+            # cy=1 (Top), cy=2 (Bottom) -> row 1
+            # Para garantir que o pico de um triângulo (cy=1) seja desenhado
+            # como um único bloco central '▄' em vez de '▄▀▄', usamos:
             char_row = (cy + 1) // 2
             is_top = cy % 2 != 0
 
-            # Recuperamos ou inicializamos as cores da célula (superior, inferior)
             cell_key = (char_row, cx)
             if cell_key not in self.screen_buffer:
                 self.screen_buffer[cell_key] = [
