@@ -72,6 +72,9 @@ class TkinterRenderer(Renderer):
     def get_start_pos(self):
         return self.width // 2, self.height // 2
 
+    def get_resolution(self):
+        return self.width, self.height
+
     def _load_window_state(self):
         """Carrega a posição da janela do arquivo de configuração e valida se está visível."""
         if os.path.exists(self.config_file):

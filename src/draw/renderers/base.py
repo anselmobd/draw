@@ -16,6 +16,11 @@ class Renderer(ABC):
         pass
 
     @abstractmethod
+    def get_resolution(self) -> tuple[int, int]:
+        """Retorna a resolução (largura, altura) do renderer."""
+        pass
+
+    @abstractmethod
     def draw_line(self, x1: float, y1: float, x2: float, y2: float):
         """Desenha uma linha entre dois pontos."""
         pass

@@ -38,6 +38,9 @@ class ConsoleRenderer(Renderer):
     def get_start_pos(self):
         return self.width // 2, self.logical_height // 2
 
+    def get_resolution(self):
+        return self.width, self.logical_height
+
     def atualizar_tamanho_terminal(self):
         try:
             tamanho = os.get_terminal_size()

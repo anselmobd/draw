@@ -12,6 +12,9 @@ class MockRenderer(Renderer):
     def get_start_pos(self):
         return self.width // 2, self.height // 2
 
+    def get_resolution(self):
+        return self.width, self.height
+
     def set_color(self, index):
         self.color_index = index
         self.history.append(("set_color", index))
