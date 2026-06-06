@@ -73,4 +73,21 @@ Para implementar a funcionalidade `wait_for_exit` ("pressione qualquer tecla par
     - Utilizamos os módulos `termios` e `tty` para manipular os atributos do descritor de arquivo do `stdin`. 
     - O terminal é colocado em **modo raw** temporariamente. Isso desativa o processamento de linha do sistema operacional (como o buffer que espera pelo *Enter* e o eco dos caracteres), permitindo a leitura de um único byte via `sys.stdin.read(1)`. Ao final, as configurações originais do terminal são restauradas para não quebrar a experiência do usuário no shell.
 
+---
+
+## 📐 Precisão e Simetria (Snap-to-Grid)
+
+Diferente de sistemas vetoriais puros, renderizadores de pixel sofrem com a acumulação de erros decimais ao lidar com rotações (TA45) e escalas. Para resolver isso, implementamos o **Grid Discreto**:
+
+1. **Interface `is_discrete`**: Renderizadores baseados em pixels indicam que trabalham em um grid fixo.
+2. **Snap-to-Grid**: A `DrawEngine` arredonda as coordenadas para o inteiro mais próximo (usando `int(v + 0.5)`) após cada movimento.
+3. **Ponto Cego**: O arredondamento ocorre **antes** do desenho. Isso garante que o ponto final de uma linha e o inicial da próxima coincidam exatamente no mesmo pixel físico, evitando "gaps" de 1 pixel em vértices e garantindo simetria perfeita em diamantes e triângulos.
+
+## 📦 Escala Física vs Escala Lógica
+
+O sistema distingue dois tipos de escala:
+- **Escala Lógica (`S n`)**: Altera o comprimento matemático das linhas (vetorial).
+- **Escala Física (`-p / pixel_size`)**: Altera o tamanho de cada "unidade de desenho" na saída. Ao usar `-p 2x2`, cada pixel lógico é desenhado como um bloco de 4 pixels físicos, gerando um efeito de *Pixel Art*. A Engine recalibra automaticamente a resolução disponível (`get_resolution`) para que o sistema de coordenadas reflita o novo tamanho do "canvas".
+
+
 Essas abordagens garantem que o encerramento do programa seja intuitivo e "limpo", respeitando o visual gerado pelo desenho.

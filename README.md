@@ -11,11 +11,12 @@ O projeto utiliza uma arquitetura modular que separa a lógica de interpretaçã
 - **Modos Avançados:** Suporte a comandos `B` (Blind - mover sem desenhar) e `N` (No Update - desenhar sem mover o cursor).
 - **Controle de Velocidade:** Parâmetro `--slow` para visualizar o desenho passo a passo.
 
-Para mais detalhes sobre a arquitetura do projeto, o funcionamento do motor de alta resolução para terminal e como executar os testes automatizados, consulte os links abaixo:
+Para mais detalhes sobre como usar o programa, a arquitetura do projeto e o funcionamento interno, consulte os links abaixo:
 
-- [Detalhes Técnicos](docs/technical_details.md)
-- [Guia de Testes](docs/testing.md)
-- [Backlog de Melhorias](docs/backlog.md)
+- [📖 Manual do Usuário](docs/user_manual.md)
+- [🛠️ Detalhes Técnicos](docs/technical_details.md)
+- [🧪 Guia de Testes](docs/testing.md)
+- [📋 Backlog de Melhorias](docs/backlog.md)
 
 ## 🛠️ Como Usar
 
@@ -43,13 +44,17 @@ python run.py -a c -m "C4 U10 R10 D10"
 
 > **Nota:** Após a execução do desenho, o programa aguardará que você pressione **qualquer tecla** para encerrar (fechar a janela ou retornar ao prompt). No console, nenhuma mensagem é exibida para não interferir no visual do desenho. O modo **Mock** (`-m`) não requer espera e encerra imediatamente após listar as coordenadas.
 
-### Argumentos
-- `command` (posicional): Uma string contendo comandos DRAW para execução direta.
+### Argumentos Principais
+- `command` (posicional): Sequência de comandos DRAW (ex: `"C4 U10 R10"`).
 - `-a, --app {g,c}`: Seleciona o renderizador (g = gráfico, c = console).
-- `-m, --mock`: Ativa o modo Mock (exibe coordenadas no console).
-- `-t, --test`: Executa os desenhos de demonstração.
-- `-s, --slow [ms]`: Define um atraso em milissegundos entre cada comando.
+- `-p, --pixel-size`: Define o tamanho físico do pixel (ex: `2` ou `2x3`).
+- `-m, --mock`: Ativa o modo auditoria (lista coordenadas no console).
+- `-t, --test`: Executa desenhos de demonstração.
+- `-s, --slow [ms]`: Atraso entre comandos para visualização passo a passo.
 - `-f, --file [PATH]`: Carrega comandos de um arquivo de texto.
+- `-h, --help`: Lista todas as opções disponíveis.
+
+Consulte o [Manual do Usuário](docs/user_manual.md) para a lista completa e detalhada de comandos e opções.
 
 ## 🎨 Tabela de Comandos DRAW
 
