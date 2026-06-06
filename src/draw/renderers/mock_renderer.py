@@ -2,9 +2,10 @@ from draw.renderers.base import Renderer
 
 
 class MockRenderer(Renderer):
-    def __init__(self, width=800, height=600):
+    def __init__(self, width=800, height=600, verbose=False):
         self.width = width
         self.height = height
+        self.verbose = verbose
         self.lines = []  # Lista de tuplas ((x1, y1), (x2, y2), color_index)
         self.color_index = 15
         self.history = []  # Log de operações para auditoria detalhada
@@ -23,10 +24,14 @@ class MockRenderer(Renderer):
         line = ((float(x1), float(y1)), (float(x2), float(y2)), self.color_index)
         self.lines.append(line)
         self.history.append(("draw_line", x1, y1, x2, y2))
+        if self.verbose:
+            print(f"{x1} {y1} - {x2} {y2} - {self.color_index}")
 
     def limpar_tela(self):
         self.lines = []
         self.history.append(("limpar_tela",))
+        if self.verbose:
+            print("limpar_tela")
 
     def wait(self, seconds):
         pass
