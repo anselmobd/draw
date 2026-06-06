@@ -74,6 +74,33 @@ class TkinterRenderer(Renderer):
             15: "white",
         }
 
+        self._resize_timer = None
+        self.root.bind("<Configure>", self._on_window_configure)
+
+    def _on_window_configure(self, event):
+        """Manipula o redimensionamento da janela com debounce."""
+        # Filtra eventos internos (o canvas disparando configure no root etc)
+        if event.widget != self.root:
+            return
+
+        # Só reage se as dimensões realmente mudaram significativamente
+        if event.width == self.width and event.height == self.height:
+            return
+
+        self.width = event.width
+        self.height = event.height
+
+        # Debounce: cancela o timer anterior e inicia um novo
+        if self._resize_timer:
+            self.root.after_cancel(self._resize_timer)
+
+        # Chama o callback após 100ms de inatividade
+        self._resize_timer = self.root.after(100, self._trigger_resize)
+
+    def _trigger_resize(self):
+        if self.on_resize_callback:
+            self.on_resize_callback()
+
     def get_start_pos(self):
         w, h = self.get_resolution()
         return w // 2, h // 2
