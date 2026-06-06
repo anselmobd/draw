@@ -6,9 +6,27 @@ Este documento lista possíveis evoluções para o projeto **DRAW Interpreter**,
 
 ## Funcionalidades e Renderização
 
-### 1. Persistência de Desenho no Modo Gráfico (Tkinter)
-Atualmente, as linhas são desenhadas diretamente no Canvas. Se a janela for minimizada ou sobreposta por outra, o conteúdo pode ser perdido em alguns sistemas.
-- **Ideia:** Armazenar um histórico de comandos de desenho (vetorial) e implementar o redesenho automático em eventos de exposição da janela.
+### 1. Sistema de Persistência e Redesenho Dinâmico
+Implementar um mecanismo centralizado na `DrawEngine` ou via histórico de comandos para permitir que o desenho seja reconstruído automaticamente em eventos de sistema.
+
+#### 1.1 Redesenho no Modo Gráfico (Tkinter)
+- **Objetivo:** Garantir que o conteúdo não seja perdido e se adapte a mudanças de janela.
+- **Ações:** 
+    - Vincular ao evento `<Configure>` do Tkinter.
+    - Limpar o canvas e reiniciar a execução do histórico de comandos.
+    - Implementar debounce ou cancelamento de tarefa para lidar com redimensionamentos contínuos (arrastar borda), interrompendo o redesenho em curso para iniciar o novo.
+
+#### 1.2 Redesenho no Modo Console
+- **Objetivo:** Adaptar o desenho ao novo tamanho do terminal (colunas/linhas).
+- **Ações:**
+    - Monitorar sinal `SIGWINCH` (Unix) ou mudanças no `os.get_terminal_size()`.
+    - Recalcular `logical_height` e redesenhar do zero para manter a centralização e proporções.
+    - Gerenciar a interrupção de fluxos lentos (com `--slow`) durante a atualização.
+
+#### 1.3 Estratégias de Ajuste de Escala (Futuro)
+- **Ideia:** Criar parâmetros via CLI para definir o comportamento do redesenho:
+    - **Modo Estático:** Redesenha mantendo o tamanho original.
+    - **Modo Proporcional:** Altera o `pixel-size` ou `scale` automaticamente para preencher a nova área disponível.
 
 ### 2. Exportação para Formatos Vetoriais (SVG)
 Aproveitar a arquitetura de Bridge para criar um `SVGRenderer`.
