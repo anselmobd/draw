@@ -4,7 +4,7 @@ O **DRAW Interpreter** é uma ferramenta versátil para criar desenhos vetoriais
 
 ---
 
-## 🕹️ Como Executar
+## Como Executar
 
 A execução é feita através do script principal `run.py`. Você pode passar uma string de comandos diretamente ou carregar um arquivo.
 
@@ -22,7 +22,7 @@ python run.py -f meus_comandos.txt
 
 ---
 
-## 🛠️ Opções de Linha de Comando (CLI)
+## Opções de Linha de Comando (CLI)
 
 | Argumento | Descrição |
 | :--- | :--- |
@@ -39,7 +39,7 @@ python run.py -f meus_comandos.txt
 
 ---
 
-## 🎨 Guia de Comandos DRAW
+## Guia de Comandos DRAW
 
 O interpretador processa sequências de letras seguidas por números. Espaços e vírgulas são opcionais.
 
@@ -69,7 +69,7 @@ O interpretador processa sequências de letras seguidas por números. Espaços e
 
 ---
 
-## 👾 Recurso Especial: Pixel Art e Proporção
+## Recurso Especial: Pixel Art e Proporção
 
 Você pode gerar artes pixeladas ajustando o tamanho do "pixel físico" via CLI. Isso é diferente da escala `S`, pois altera a espessura da linha e a resolução disponível da tela.
 
@@ -84,7 +84,11 @@ python run.py -p 2x4 "C14 U10 R10 D10 L10"
 
 ---
 
-## ⌨️ Comandos do Teclado
+## Comandos do Teclado
 Após o término de um desenho, a janela gráfica ou o terminal aguardará uma interação:
 - **Qualquer Tecla**: Fecha o programa ou limpa o terminal.
 - **ESC** (Modo Gráfico): Fecha a janela.
+
+---
+
+[Voltar ao README](../README.md)

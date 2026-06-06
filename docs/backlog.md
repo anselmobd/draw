@@ -4,7 +4,7 @@ Este documento lista possíveis evoluções para o projeto **DRAW Interpreter**,
 
 ---
 
-## 🚀 Funcionalidades e Renderização
+## Funcionalidades e Renderização
 
 ### 1. Persistência de Desenho no Modo Gráfico (Tkinter)
 Atualmente, as linhas são desenhadas diretamente no Canvas. Se a janela for minimizada ou sobreposta por outra, o conteúdo pode ser perdido em alguns sistemas.
@@ -24,7 +24,7 @@ Ajustar o renderizador de terminal para lidar com mudanças no tamanho da janela
 
 ---
 
-## 🛠️ Qualidade de Código e Arquitetura
+## Qualidade de Código e Arquitetura
 
 ### 5. Sistema de Macros e Sub-Desenhos
 Implementar suporte para definir blocos de comandos que podem ser reutilizados.
@@ -32,20 +32,7 @@ Implementar suporte para definir blocos de comandos que podem ser reutilizados.
 
 ---
 
-## ✅ Melhorias Implementadas
-
-### 1. Suíte de Testes Automatizados (Pytest)
-Implementada a base para testes de regressão da lógica do interpretador.
-- **Resultado:** Criado o `MockRenderer` e conjunto inicial de testes em `tests/test_engine.py` cobrindo movimentos, transformações e estados da Engine.
-- **Documentação:** [Guia de Testes](testing.md).
-
-### 2. Modos de Janela (Tkinter)
-Adicionado suporte para diferentes estados de exibição da janela gráfica via CLI.
-- **Resultado:** Implementadas as flags `--fullscreen` (-F) e `--maximize` (-M). O canvas agora se ajusta automaticamente à resolução do monitor ou área maximizada, garantindo desenhos centralizados em qualquer escala.
-
----
-
-## 🎨 Experiência do Usuário (UX)
+## Experiência do Usuário (UX)
 
 ### 6. Interface CLI Interativa (REPL)
 Permitir que o usuário digite comandos um a um e veja o resultado imediatamente.
@@ -54,3 +41,7 @@ Permitir que o usuário digite comandos um a um e veja o resultado imediatamente
 ### 7. Documentação Automática de Comandos
 Gerar uma referência rápida formatada a partir das docstrings dos métodos da `DrawEngine`.
 - **Ideia:** Facilitar para que o usuário saiba quais comandos estão disponíveis e qual a sintaxe exata de cada um sem precisar ler o código.
+
+---
+
+[Voltar ao README](../README.md)

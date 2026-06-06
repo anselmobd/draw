@@ -4,7 +4,7 @@ Um interpretador unificado para o comando `DRAW` (inspirado no clássico BASIC),
 
 O projeto utiliza uma arquitetura modular que separa a lógica de interpretação da trajetória (Engine) da implementação visual (Renderers), permitindo fácil expansão para novas interfaces.
 
-## 🚀 Funcionalidades
+## Funcionalidades
 
 - **Renderização Dupla:** Escolha entre uma janela gráfica (`Tkinter`) ou o terminal (`ANSI`).
 - **Comandos Clássicos:** Suporte a `U`, `D`, `L`, `R`, `E`, `F`, `G`, `H`, `M`, `C`, `S`, `A`, `TA`.
@@ -13,12 +13,12 @@ O projeto utiliza uma arquitetura modular que separa a lógica de interpretaçã
 
 Para mais detalhes sobre como usar o programa, a arquitetura do projeto e o funcionamento interno, consulte os links abaixo:
 
-- [📖 Manual do Usuário](docs/user_manual.md)
-- [🛠️ Detalhes Técnicos](docs/technical_details.md)
-- [🧪 Guia de Testes](docs/testing.md)
-- [📋 Backlog de Melhorias](docs/backlog.md)
+- [Manual do Usuário](docs/user_manual.md)
+- [Detalhes Técnicos](docs/technical_details.md)
+- [Guia de Testes](docs/testing.md)
+- [Backlog de Melhorias](docs/backlog.md)
 
-## 🛠️ Como Usar
+## Como Usar
 
 ### Pré-requisitos
 - Python 3.10+
@@ -56,7 +56,7 @@ python run.py -a c -m "C4 U10 R10 D10"
 
 Consulte o [Manual do Usuário](docs/user_manual.md) para a lista completa e detalhada de comandos e opções.
 
-## 🎨 Tabela de Comandos DRAW
+## Tabela de Comandos DRAW
 
 | Comando | Descrição |
 | :--- | :--- |
@@ -70,7 +70,7 @@ Consulte o [Manual do Usuário](docs/user_manual.md) para a lista completa e det
 | **B** | Prefixo para mover sem desenhar. |
 | **N** | Prefixo para desenhar sem atualizar a posição final. |
 
-## 📄 Licença
+## Licença
 
 Este projeto está licenciado sob a licença **BSD 3-Clause** - veja o arquivo [LICENSE](LICENSE) para detalhes.
 
