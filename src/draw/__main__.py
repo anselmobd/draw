@@ -3,6 +3,7 @@ import sys
 from draw.core.engine import DrawEngine
 from draw.renderers.console_renderer import ConsoleRenderer
 from draw.renderers.tkinter_renderer import TkinterRenderer
+from draw.renderers.mock_renderer import MockRenderer
 
 
 def parse_args():
@@ -28,6 +29,12 @@ def parse_args():
         choices=["g", "c"],
         default="g",
         help="Escolha a apresentação: g (gráfico, padrão) ou c (console)",
+    )
+    parser.add_argument(
+        "-m",
+        "--mock",
+        action="store_true",
+        help="Executa em modo mock (apenas listagem de coordenadas no console)",
     )
     parser.add_argument(
         "-F",
@@ -59,9 +66,13 @@ def main():
         window_mode = "maximized"
 
     if args.app == "c":
-        renderer = ConsoleRenderer()
+        renderer = ConsoleRenderer(headless=args.mock)
     else:
-        renderer = TkinterRenderer(window_mode=window_mode)
+        renderer = TkinterRenderer(window_mode=window_mode, headless=args.mock)
+
+    if args.mock:
+        w, h = renderer.get_resolution()
+        renderer = MockRenderer(width=w, height=h, verbose=True)
 
     engine = DrawEngine(renderer, delay_ms=args.slow)
 

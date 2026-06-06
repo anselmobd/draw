@@ -34,18 +34,19 @@ python run.py -t
 # Executar o teste padrão no Console
 python run.py -a c -t
 
-# Executar uma string de comandos específica
-python run.py "C4 U40 R40 D40 L40"
+# Executar o mock das coordenadas (respeitando a resolução do modo gráfico)
+python run.py -m "C4 U40 R40 D40"
 
-# Executar a partir de um arquivo
-python run.py -f assets/desenho.txt
+# Executar o mock das coordenadas (respeitando a resolução do terminal/console)
+python run.py -a c -m "C4 U10 R10 D10"
 ```
 
-> **Nota:** Após a execução do desenho, o programa aguardará que você pressione **qualquer tecla** para encerrar (fechar a janela ou retornar ao prompt). No console, nenhuma mensagem é exibida para não interferir no visual do desenho.
+> **Nota:** Após a execução do desenho, o programa aguardará que você pressione **qualquer tecla** para encerrar (fechar a janela ou retornar ao prompt). No console, nenhuma mensagem é exibida para não interferir no visual do desenho. O modo **Mock** (`-m`) não requer espera e encerra imediatamente após listar as coordenadas.
 
 ### Argumentos
 - `command` (posicional): Uma string contendo comandos DRAW para execução direta.
 - `-a, --app {g,c}`: Seleciona o renderizador (g = gráfico, c = console).
+- `-m, --mock`: Ativa o modo Mock (exibe coordenadas no console).
 - `-t, --test`: Executa os desenhos de demonstração.
 - `-s, --slow [ms]`: Define um atraso em milissegundos entre cada comando.
 - `-f, --file [PATH]`: Carrega comandos de um arquivo de texto.
