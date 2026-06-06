@@ -119,5 +119,12 @@ class DrawEngine:
             self.renderer.draw_line(self.x, self.y, nx, ny)
 
         if not noupdate:
-            self.x = nx
-            self.y = ny
+            # Em renderizadores que trabalham com grid discreto (ex: Console, Tkinter),
+            # arredondar a posição interna evita a acumulação de erros de ponto flutuante
+            # que quebram a simetria de desenhos geométricos (especialmente em 45°).
+            if self.renderer.is_discrete:
+                self.x = float(int(nx + 0.5))
+                self.y = float(int(ny + 0.5))
+            else:
+                self.x = nx
+                self.y = ny
