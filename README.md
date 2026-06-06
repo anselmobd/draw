@@ -17,6 +17,7 @@ Para mais detalhes sobre como usar o programa, a arquitetura do projeto e o func
 - [Detalhes Técnicos](docs/technical_details.md)
 - [Guia de Testes](docs/testing.md)
 - [Backlog de Melhorias](docs/backlog.md)
+- [Criar Novo Renderer](docs/renderer_creation_guide.md)  
 
 ## Como Usar
 
