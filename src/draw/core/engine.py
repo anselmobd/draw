@@ -9,17 +9,29 @@ __all__ = [
 class DrawEngine:
     def __init__(self, renderer, delay_ms=0):
         self.renderer = renderer
-        self.x, self.y = renderer.get_start_pos()
+        self.initial_renderer_state = {
+            "start_pos": renderer.get_start_pos()
+        }
+        self.x, self.y = self.initial_renderer_state["start_pos"]
         self.scale = 4
         self.angle = 0
         self.color_index = 15
         self.delay = delay_ms / 1000.0
+        self.command_history = []
+        self._is_running = False
+        self._stop_requested = False
 
     def execute(self, draw_string):
+        if not self._is_running:
+            self.command_history.append(draw_string)
+        
+        self._is_running = True
+        self._stop_requested = False
+        
         tokens = re.findall(r"([A-Za-z]+|[-+]?\d+[\s,]*[-+]?\d*|[-+]?\d+)", draw_string)
 
         i = 0
-        while i < len(tokens):
+        while i < len(tokens) and not self._stop_requested:
             token = tokens[i].upper().strip()
 
             blind = False
@@ -58,8 +70,35 @@ class DrawEngine:
                 self.angle = float(arg) if arg else 0.0
 
             i += 1
-            if self.delay > 0:
+            if self.delay > 0 and not self._stop_requested:
                 self.renderer.wait(self.delay)
+
+        self._is_running = False
+
+    def stop(self):
+        """Solicita a interrupção da execução atual."""
+        if self._is_running:
+            self._stop_requested = True
+
+    def reset(self):
+        """Reinicia o estado da engine para a posição original, mantendo o histórico."""
+        self.stop()
+        self.x, self.y = self.renderer.get_start_pos()
+        self.scale = 4
+        self.angle = 0
+        self.color_index = 15
+        self.renderer.set_color(self.color_index)
+
+    def redraw(self):
+        """Limpa o renderer e reexecuta todo o histórico de comandos."""
+        self.reset()
+        self.renderer.limpar_tela()
+        full_history = " ".join(self.command_history)
+        # Temporariamente limpamos o histórico para não duplicar ao chamar execute
+        current_history = self.command_history[:]
+        self.command_history = []
+        self.execute(full_history)
+        self.command_history = current_history
 
     def execute_file(self, file_path):
         try:
