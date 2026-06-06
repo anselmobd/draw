@@ -26,13 +26,18 @@ Ajustar o renderizador de terminal para lidar com mudanças no tamanho da janela
 
 ## 🛠️ Qualidade de Código e Arquitetura
 
-### 5. Suíte de Testes Automatizados (Pytest)
-Garantir que as transformações matemáticas (rotação, escala, movimentos relativos) continuem corretas após refatorações.
-- **Ideia:** Criar um `MockRenderer` que registra apenas os pontos lógicos desenhados e comparar os resultados com desenhos de referência conhecidos.
-
-### 6. Sistema de Macros e Sub-Desenhos
+### 5. Sistema de Macros e Sub-Desenhos
 Implementar suporte para definir blocos de comandos que podem ser reutilizados.
 - **Ideia:** Adicionar um comando `D n` (Define) para salvar uma sequência e um comando `X n` (eXecute) para chamá-la, similar ao que alguns dialetos BASIC faziam.
+
+---
+
+## ✅ Melhorias Implementadas
+
+### 1. Suíte de Testes Automatizados (Pytest)
+Implementada a base para testes de regressão da lógica do interpretador.
+- **Resultado:** Criado o `MockRenderer` e conjunto inicial de testes em `tests/test_engine.py` cobrindo movimentos, transformações e estados da Engine.
+- **Documentação:** [Guia de Testes](testing.md).
 
 ---
 
