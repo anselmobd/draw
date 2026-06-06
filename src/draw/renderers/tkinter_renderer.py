@@ -2,6 +2,7 @@ import tkinter as tk
 import time
 import json
 import os
+import math
 from draw.renderers.base import Renderer
 
 
@@ -141,15 +142,16 @@ class TkinterRenderer(Renderer):
 
         # Para pixels maiores, simulamos a linha desenhando "blocos" ao longo da trajetória
         # usando Bresenham para consistência com o motor.
-        dx = abs(int(x2) - int(x1))
-        dy = abs(int(y2) - int(y1))
-        sx = 1 if x1 < x2 else -1
-        sy = 1 if y1 < y2 else -1
+        x1_i, y1_i = int(math.floor(x1 + 0.5)), int(math.floor(y1 + 0.5))
+        x2_i, y2_i = int(math.floor(x2 + 0.5)), int(math.floor(y2 + 0.5))
+
+        dx = abs(x2_i - x1_i)
+        dy = abs(y2_i - y1_i)
+        sx = 1 if x1_i < x2_i else -1
+        sy = 1 if y1_i < y2_i else -1
         err = dx - dy
 
-        cx, cy = int(x1), int(y1)
-        x2_i, y2_i = int(x2), int(y2)
-
+        cx, cy = x1_i, y1_i
         while True:
             # Desenha o "pixel gigante"
             # (cx, cy) são as coordenadas lógicas. Multiplicamos pelo tamanho do pixel.

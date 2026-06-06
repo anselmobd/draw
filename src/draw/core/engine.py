@@ -121,8 +121,8 @@ class DrawEngine:
         # arredondar as coordenadas antes de desenhar garante que os renderizadores
         # recebam pontos exatos, evitando gaps em vértices e mantendo a simetria.
         if self.renderer.is_discrete:
-            target_x = float(int(nx + 0.5))
-            target_y = float(int(ny + 0.5))
+            target_x = float(math.floor(nx + 0.5))
+            target_y = float(math.floor(ny + 0.5))
 
         if not blind:
             self.renderer.draw_line(self.x, self.y, target_x, target_y)

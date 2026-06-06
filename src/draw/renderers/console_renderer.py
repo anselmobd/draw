@@ -1,6 +1,7 @@
 import os
 import sys
 import time
+import math
 from draw.renderers.base import Renderer
 
 
@@ -74,8 +75,8 @@ class ConsoleRenderer(Renderer):
     def draw_line(self, x1, y1, x2, y2):
         # Algoritmo de Bresenham para garantir linhas simétricas e sem gaps
         # Trabalhamos diretamente no grid discreto (pixels)
-        x1_i, y1_i = int(x1 + 0.5), int(y1 + 0.5)
-        x2_i, y2_i = int(x2 + 0.5), int(y2 + 0.5)
+        x1_i, y1_i = int(math.floor(x1 + 0.5)), int(math.floor(y1 + 0.5))
+        x2_i, y2_i = int(math.floor(x2 + 0.5)), int(math.floor(y2 + 0.5))
 
         dx = abs(x2_i - x1_i)
         dy = abs(y2_i - y1_i)
@@ -108,16 +109,18 @@ class ConsoleRenderer(Renderer):
                 self._plot_single(cx * pw + px, cy * ph + py)
 
     def _plot_single(self, cx, cy):
-        if 1 <= cx <= self.width and 1 <= cy <= self.logical_height:
+        # As coordenadas cx e cy no buffer são 0-indexadas:
+        # cx: 0 até width-1
+        # cy: 0 até logical_height-1
+        if 0 <= cx < self.width and 0 <= cy < self.logical_height:
             # Algoritmo de mapeamento para sub-pixel ANSI:
             # Cada célula do terminal (row) tem 2 pixels verticais.
-            # cy=1 (Top), cy=2 (Bottom) -> row 1
-            # Para garantir que o pico de um triângulo (cy=1) seja desenhado
-            # como um único bloco central '▄' em vez de '▄▀▄', usamos:
-            char_row = (cy + 1) // 2
-            is_top = cy % 2 != 0
+            # cy=0 (Top) e cy=1 (Bottom) pertencem à row 1 (ANSI é 1-indexado para cursor)
+            char_row = (cy // 2) + 1
+            char_col = cx + 1
+            is_top = cy % 2 == 0
 
-            cell_key = (char_row, cx)
+            cell_key = (char_row, char_col)
             if cell_key not in self.screen_buffer:
                 self.screen_buffer[cell_key] = [
                     None,
@@ -160,7 +163,7 @@ class ConsoleRenderer(Renderer):
                 bg = "49"
                 char = "▄"
 
-            sys.stdout.write(f"\033[{char_row};{cx}H\033[{fg};{bg}m{char}")
+            sys.stdout.write(f"\033[{char_row};{char_col}H\033[{fg};{bg}m{char}")
             sys.stdout.flush()
 
     def wait(self, seconds):
