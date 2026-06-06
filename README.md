@@ -11,7 +11,11 @@ O projeto utiliza uma arquitetura modular que separa a lógica de interpretaçã
 - **Modos Avançados:** Suporte a comandos `B` (Blind - mover sem desenhar) e `N` (No Update - desenhar sem mover o cursor).
 - **Controle de Velocidade:** Parâmetro `--slow` para visualizar o desenho passo a passo.
 
-Para mais detalhes sobre a arquitetura do projeto e o funcionamento do motor de alta resolução para terminal, consulte os [Detalhes Técnicos](docs/technical_details.md).
+Para mais detalhes sobre a arquitetura do projeto, o funcionamento do motor de alta resolução para terminal e como executar os testes automatizados, consulte os links abaixo:
+
+- [Detalhes Técnicos](docs/technical_details.md)
+- [Guia de Testes](docs/testing.md)
+- [Backlog de Melhorias](docs/backlog.md)
 
 ## 🛠️ Como Usar
 
