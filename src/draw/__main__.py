@@ -65,6 +65,9 @@ def parse_args():
 def main():
     args = parse_args()
 
+    if args.test and args.app == "g":
+        args.pixel_size = "8"
+
     # Processa o tamanho do pixel
     try:
         if "x" in args.pixel_size:
@@ -104,10 +107,7 @@ def main():
     engine = DrawEngine(renderer, delay_ms=args.slow)
 
     if args.test:
-        if args.app == "c":
-            engine.execute_file("assets/teste_console.txt")
-        else:
-            engine.execute_file("assets/teste_grafico.txt")
+        engine.execute_file("assets/teste.drw")
 
     if args.command:
         engine.execute(args.command)
