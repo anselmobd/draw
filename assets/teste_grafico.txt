@@ -1,0 +1,39 @@
+# ===============================
+# DESENHO TESTE PARA MODO GRAFICO
+# ===============================
+
+# Escala as quantidades de movimento em 6 vezes
+S24
+
+# Cores
+BM-32,-8
+C0 NR16 BD1
+C1 NR16 BD1
+C2 NR16 BD1
+C3 NR16 BD1
+C4 NR16 BD1
+C5 NR16 BD1
+C6 NR16 BD1
+C7 NR16 BD1
+C8 NR16 BD1
+C9 NR16 BD1
+C10 NR16 BD1
+C11 NR16 BD1
+C12 NR16 BD1
+C13 NR16 BD1
+C14 NR16 BD1
+C15 NR16 BD1
+
+# Estrela
+BM+28,-8
+NU8 NR8 ND8 NL8
+NE8 NF8 NG8 NH8
+
+# Quadrado
+BM+12,+4
+C3 U8 R8 D8 L8
+
+# Quadrado rotacionado
+BR20
+TA45
+C4 U8 R8 D8 L8

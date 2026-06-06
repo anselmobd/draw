@@ -1,9 +1,0 @@
-# Desenha uma estrela usando o modificador N (No-update)
-C14  # Cor Amarela
-NU50 NR50 ND50 NL50
-NE35 NF35 NG35 NH35
-
-# Move para o lado e faz uma caixa ciano
-BM +150,-50
-C3
-U30 R30 D30 L30

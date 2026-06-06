@@ -80,8 +80,7 @@ def main():
         if args.app == "c":
             engine.execute_file("assets/teste_console.txt")
         else:
-            engine.execute("C4 U40 R40 D40 L40 BM +60,+60 C14 TA45 U40 R40 D40 L40")
-            engine.execute_file("assets/desenho.txt")
+            engine.execute_file("assets/teste_grafico.txt")
 
     if args.command:
         engine.execute(args.command)
