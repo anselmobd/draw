@@ -11,6 +11,11 @@ class Renderer(ABC):
         """Define o callback a ser chamado em caso de redimensionamento."""
         self.on_resize_callback = callback
 
+    @property
+    def should_redraw(self) -> bool:
+        """Indica se o renderizador solicita um redesenho imediato."""
+        return False
+
     def is_alive(self) -> bool:
         """Retorna se o renderizador ainda está ativo para desenho."""
         return True
@@ -43,6 +48,10 @@ class Renderer(ABC):
     @abstractmethod
     def limpar_tela(self):
         """Limpa a área de desenho."""
+        pass
+
+    def prepare_for_redraw(self):
+        """Prepara o renderer para um redesenho (ex: atualiza dimensões)."""
         pass
 
     @abstractmethod

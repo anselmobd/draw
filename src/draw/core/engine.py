@@ -32,10 +32,15 @@ class DrawEngine:
 
         i = 0
         while i < len(tokens) and current_run_id == self._run_id:
+            # Verifica se o renderer solicitou um redesenho (ex: redimensionamento)
+            if self.renderer.should_redraw:
+                self.redraw()
+                break
+
             if not self.renderer.is_alive():
                 self.stop()
                 break
-                
+
             token = tokens[i].upper().strip()
 
             # ... (Lógica de prefixos B/N)
@@ -97,6 +102,7 @@ class DrawEngine:
     def redraw(self):
         """Limpa o renderer e reexecuta todo o histórico de comandos."""
         self.stop()
+        self.renderer.prepare_for_redraw()
         self.renderer.limpar_tela()
         self.reset()
         full_history = " ".join(self.command_history)

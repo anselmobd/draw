@@ -2,6 +2,8 @@ import os
 import sys
 import time
 import math
+import signal
+import select
 from draw.renderers.base import Renderer
 
 
@@ -12,7 +14,13 @@ class ConsoleRenderer(Renderer):
             os.system("")
 
         super().__init__(pixel_size=pixel_size)
+        self.needs_redraw = False
         self.atualizar_tamanho_terminal()
+
+        # Registra o signal handler para redimensionamento (apenas Unix/Linux)
+        if os.name != "nt":
+            signal.signal(signal.SIGWINCH, self._handle_sigwinch)
+
         self.fg_code = "37"  # Branco frontal padrão
         self.bg_code = "40"  # Preto de fundo padrão
         self.screen_buffer = {}  # Armazena as cores (fg, bg) de cada célula (row, col)
@@ -59,12 +67,20 @@ class ConsoleRenderer(Renderer):
         self.logical_height = self.height * 2
 
     @property
+    def should_redraw(self) -> bool:
+        return self.needs_redraw
+
+    @property
     def is_discrete(self) -> bool:
         return True
 
     def limpar_tela(self):
         # Limpa o buffer interno para não sobrar pixels de desenhos anteriores
         self.screen_buffer = {}
+        # Garante que as cores sejam resetadas antes de limpar a tela,
+        # para evitar que o terminal preencha o fundo com a última cor ativa (Background Color Erase)
+        sys.stdout.write("\033[0m")
+        sys.stdout.flush()
         os.system("cls" if os.name == "nt" else "clear")
         sys.stdout.write("\033[?25l")
         sys.stdout.flush()
@@ -163,34 +179,69 @@ class ConsoleRenderer(Renderer):
                 bg = "49"
                 char = "▄"
 
-            sys.stdout.write(f"\033[{char_row};{char_col}H\033[{fg};{bg}m{char}")
+            # Escreve o pixel e reseta as cores para evitar "vazamento" de cor de fundo
+            # se o terminal redimensionar/rolar durante a renderização.
+            sys.stdout.write(f"\033[{char_row};{char_col}H\033[{fg};{bg}m{char}\033[0m")
             sys.stdout.flush()
 
+    def _handle_sigwinch(self, signum, frame):
+        """Signal handler para o redimensionamento do terminal."""
+        self.needs_redraw = True
+
+    def prepare_for_redraw(self):
+        """Atualiza as dimensões e limpa a flag de redraw."""
+        self.needs_redraw = False
+        self.atualizar_tamanho_terminal()
+
     def wait(self, seconds):
-        time.sleep(seconds)
+        try:
+            time.sleep(seconds)
+        except InterruptedError:
+            # Em caso de interrupção (ex: SIGWINCH), o tempo de espera pode ser menor
+            pass
 
     def wait_for_exit(self):
-        # Aguarda qualquer tecla para sair no console
-        # Removida mensagem para não interferir no desenho visual
+        # Aguarda qualquer tecla para sair no console ou um sinal de redraw
+        while True:
+            if self.needs_redraw:
+                self.needs_redraw = False
+                self.atualizar_tamanho_terminal()
+                if self.on_resize_callback:
+                    self.on_resize_callback()
+                continue
 
-        if os.name == "nt":
-            import msvcrt
+            try:
+                if os.name == "nt":
+                    import msvcrt
 
-            msvcrt.getch()
-        else:
-            fd = sys.stdin.fileno()
-            if os.isatty(fd):
-                import tty
-                import termios
+                    # O msvcrt.kbhit() permite verificar se há tecla sem bloquear
+                    # Mas para o exercício, vamos manter o bloqueio simples
+                    msvcrt.getch()
+                    break
+                else:
+                    fd = sys.stdin.fileno()
+                    if os.isatty(fd):
+                        import tty
+                        import termios
 
-                old_settings = termios.tcgetattr(fd)
-                try:
-                    tty.setraw(sys.stdin.fileno())
-                    sys.stdin.read(1)
-                finally:
-                    termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
-            else:
-                sys.stdin.read(1)
+                        old_settings = termios.tcgetattr(fd)
+                        try:
+                            tty.setraw(fd)
+                            # Usamos select para poder ser interrompido por sinais ou timeout
+                            # Espera por entrada no stdin com timeout curto para checar flags
+                            r, _, _ = select.select([sys.stdin], [], [], 0.5)
+                            if r:
+                                sys.stdin.read(1)
+                                break
+                        finally:
+                            termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+                    else:
+                        # Fallback se não for tty
+                        sys.stdin.read(1)
+                        break
+            except (InterruptedError, select.error):
+                # Se for interrompido por sinal, volta ao início do loop para checar needs_redraw
+                continue
 
     def finalize(self):
         sys.stdout.write(f"\033[{self.height};1H\033[0m\n")
