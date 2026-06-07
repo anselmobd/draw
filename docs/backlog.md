@@ -9,7 +9,13 @@ Este documento lista possíveis evoluções para o projeto **DRAW Interpreter** 
 ### 1. Distribuição Global e Acessibilidade (Portable CLI)
 Expandir o projeto para que pessoas que não são desenvolvedoras Python consigam utilizar o comando `draw` sem configurar ambientes virtuais ou gerenciar dependências.
 
-#### 1.1 Scripts de Instalação "One-Liner" (Fase Atual)
+#### 1.0 Ciclo de Lançamento e Automação (Fase Atual)
+Implementar ferramentas para facilitar o lançamento de novas versões.
+- **Versão Única:** Centralizar a versão em um único lugar para evitar inconsistências.
+- **CHANGELOG:** Manter um registro humano das mudanças para usuários finais.
+- **Automação de Release:** Estudar ferramentas como `bumpver` ou `commitizen` para automatizar o incremento de versão e tags.
+
+#### 1.1 Scripts de Instalação "One-Liner"
 Criar scripts automatizados que detectam o ambiente e instalam o `draw` pronto para uso.
 - **Linux/macOS (Bash):** Script que verifica o Python, cria um ambiente isolado em `~/.local/share/draw` e cria um link simbólico para o executável em `~/.local/bin`.
 - **Windows (PowerShell):** Script equivalente que instala em `%APPDATA%\draw` e ajusta o `PATH` do usuário.

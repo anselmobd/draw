@@ -1,5 +1,6 @@
 import argparse
 import sys
+from draw import __version__
 from draw.core.engine import DrawEngine
 from draw.renderers.console_renderer import ConsoleRenderer
 from draw.renderers.tkinter_renderer import TkinterRenderer
@@ -8,11 +9,15 @@ from draw.renderers.mock_renderer import MockRenderer
 
 def parse_args():
     parser = argparse.ArgumentParser(
+        prog="draw",
         description="Interpretador DRAW Unificado",
         epilog="Nota: O programa aguarda o pressionamento de qualquer tecla para encerrar após o desenho.",
     )
     parser.add_argument(
         "command", type=str, nargs="?", help="Executa uma string de comandos DRAW"
+    )
+    parser.add_argument(
+        "-v", "--version", action="version", version=f"%(prog)s {__version__}"
     )
     parser.add_argument(
         "-f", "--file", type=str, help="Executa comandos DRAW de um arquivo"
