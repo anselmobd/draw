@@ -1,6 +1,6 @@
 [project]
 name = "draw"
-version = "0.1.0"
+version = "0.1.1"
 description = "Comando DRAW"
 readme = "README.md"
 license = {text = "BSD-3-Clause"}
@@ -21,7 +21,7 @@ pythonpath = ["src"]
 testpaths = ["tests"]
 
 [tool.bumpver]
-current_version = "0.1.0"
+current_version = "0.1.1"
 version_pattern = "MAJOR.MINOR.PATCH"
 commit_message = "bump version {old_version} -> {new_version}"
 commit = true
@@ -36,5 +36,6 @@ push = false
     '__version__ = "{version}"',
 ]
 "CHANGELOG.md" = [
-    '## [{version}]',
+    '## \[Unreleased\]',
+    '## \[{version}\] - {date}',
 ]
