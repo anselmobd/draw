@@ -233,6 +233,7 @@ class TkinterRenderer(Renderer):
             # Vincula apenas as teclas solicitadas (Enter e Espaço)
             self.root.bind("<space>", self._on_exit)
             self.root.bind("<Return>", self._on_exit)
+            self.root.bind("<KP_Enter>", self._on_exit)
             self.root.mainloop()
         except (tk.TclError, KeyboardInterrupt):
             self.alive = False
