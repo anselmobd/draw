@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Comando DRAW"
 readme = "README.md"
 license = {text = "BSD-3-Clause"}
-requires-python = ">=3.13"
+requires-python = ">=3.10"
 dependencies = []
 
 [project.scripts]
