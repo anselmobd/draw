@@ -1,5 +1,6 @@
 import argparse
 import sys
+import os
 from draw import __version__
 from draw.core.engine import DrawEngine
 
@@ -141,7 +142,20 @@ def run_application(args):
         engine = DrawEngine(renderer, delay_ms=args.slow)
 
         if args.test:
-            engine.execute_file("assets/teste.drw")
+            # Localiza o arquivo de teste dentro do pacote instalado
+            pkg_dir = os.path.dirname(os.path.abspath(__file__))
+            test_file = os.path.join(pkg_dir, "assets", "teste.drw")
+            
+            if not os.path.exists(test_file):
+                # Fallback para o diretório de desenvolvimento se rodando localmente
+                dev_test_file = os.path.join(os.path.dirname(pkg_dir), "..", "assets", "teste.drw")
+                if os.path.exists(dev_test_file):
+                    test_file = dev_test_file
+                else:
+                    print(f"Erro: Arquivo de teste '{test_file}' não encontrado.")
+                    sys.exit(1)
+                    
+            engine.execute_file(test_file)
 
         if args.command:
             engine.execute(args.command)

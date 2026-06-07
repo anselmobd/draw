@@ -1,11 +1,17 @@
 [project]
 name = "draw"
-version = "0.1.1"
+version = "0.1.2"
 description = "Comando DRAW"
 readme = "README.md"
 license = {text = "BSD-3-Clause"}
 requires-python = ">=3.10"
 dependencies = []
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.package-data]
+"draw" = ["assets/*.drw"]
 
 [project.scripts]
 draw = "draw.__main__:main"
@@ -21,7 +27,7 @@ pythonpath = ["src"]
 testpaths = ["tests"]
 
 [tool.bumpver]
-current_version = "0.1.1"
+current_version = "0.1.2"
 version_pattern = "MAJOR.MINOR.PATCH"
 commit_message = "bump version {old_version} -> {new_version}"
 commit = true
@@ -34,8 +40,4 @@ push = false
 ]
 "src/draw/__init__.py" = [
     '__version__ = "{version}"',
-]
-"CHANGELOG.md" = [
-    '## \[Unreleased\]',
-    '## \[{version}\] - {date}',
 ]

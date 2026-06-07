@@ -30,7 +30,7 @@ draw -f meus_comandos.txt
 | `-h, --help` | Exibe a mensagem de ajuda e sai. |
 | `--help-draw` | Exibe a lista detalhada de comandos DRAW e a paleta de cores interna. |
 | `-f, --file PATH` | Carrega e executa comandos DRAW de um arquivo de texto. |
-| `-t, --test` | Executa os desenhos de demonstração (`assets/teste_...`). |
+| `-t, --test` | Executa os desenhos de demonstração internos do pacote. |
 | `-s, --slow ms` | Adiciona um atraso em milissegundos entre cada comando (ideal para ver animação). |
 | `-a, --app {g,c}` | Escolha entre **g** (gráfico/Tkinter) ou **c** (console/terminal, padrão). |
 | `-m, --mock` | Modo de auditoria: exibe as coordenadas calculadas no console sem desenhar. |
