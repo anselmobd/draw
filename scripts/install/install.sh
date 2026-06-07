@@ -58,11 +58,25 @@ EOF
 
 chmod +x "$BIN_DIR/draw"
 
+# 5.1 Criar o desinstalador
+echo "[4.1/4] Criando desinstalador..."
+cat <<EOF > "$INSTALL_DIR/uninstall.sh"
+#!/bin/bash
+echo "Removendo DRAW Interpreter..."
+rm -f "$BIN_DIR/draw"
+rm -f "$BIN_DIR/draw-uninstall"
+rm -rf "$INSTALL_DIR"
+echo "DRAW Interpreter removido com sucesso."
+EOF
+chmod +x "$INSTALL_DIR/uninstall.sh"
+ln -sf "$INSTALL_DIR/uninstall.sh" "$BIN_DIR/draw-uninstall"
+
 # 6. Finalização
 echo "----------------------------------------------------"
 echo "  Instalação Concluída com Sucesso!"
 echo "----------------------------------------------------"
 echo "Você já pode usar o comando: draw"
+echo "Para desinstalar, use: draw-uninstall"
 echo ""
 echo "Nota: Certifique-se de que '$BIN_DIR' está no seu PATH."
 echo "Se 'draw' não funcionar, adicione esta linha ao seu .bashrc ou .zshrc:"

@@ -34,7 +34,7 @@ curl -sSL https://raw.githubusercontent.com/anselmobd/draw/main/scripts/install/
 iwr -useb https://raw.githubusercontent.com/anselmobd/draw/main/scripts/install/install.ps1 | iex
 ```
 
-*Nota: Os scripts acima configuram um ambiente isolado e criam o comando global `draw`. Requer Python 3 instalado.*
+*Nota: Os scripts acima configuram um ambiente isolado e criam o comando global `draw`. Requer Python 3 instalado. Para remover o programa, você pode usar o comando `draw-uninstall` que será criado durante a instalação.*
 
 ## Como Usar
 

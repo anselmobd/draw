@@ -57,11 +57,29 @@ $BatContent = @"
 "@
 $BatContent | Out-File -FilePath "$BinDir\draw.bat" -Encoding ASCII
 
+# 5.1 Criar o desinstalador
+Write-Host "[4.1/4] Criando desinstalador..."
+$UninstallScript = @"
+Write-Host "Removendo DRAW Interpreter..." -ForegroundColor Yellow
+if (Test-Path "$BinDir\draw.bat") { Remove-Item -Force "$BinDir\draw.bat" }
+if (Test-Path "$BinDir\draw-uninstall.bat") { Remove-Item -Force "$BinDir\draw-uninstall.bat" }
+if (Test-Path "$InstallDir") { Remove-Item -Recurse -Force "$InstallDir" }
+Write-Host "DRAW Interpreter removido com sucesso." -ForegroundColor Green
+"@
+$UninstallScript | Out-File -FilePath "$InstallDir\uninstall.ps1" -Encoding UTF8
+
+$UninstallBatContent = @"
+@echo off
+powershell -ExecutionPolicy Bypass -File "$InstallDir\uninstall.ps1"
+"@
+$UninstallBatContent | Out-File -FilePath "$BinDir\draw-uninstall.bat" -Encoding ASCII
+
 # 6. Finalização
 Write-Host "----------------------------------------------------" -ForegroundColor Green
 Write-Host "  Instalação Concluída com Sucesso!" -ForegroundColor Green
 Write-Host "----------------------------------------------------" -ForegroundColor Green
 Write-Host "Você já pode usar o comando: draw" -ForegroundColor White
+Write-Host "Para desinstalar, use: draw-uninstall" -ForegroundColor White
 Write-Host ""
 Write-Host "Se o comando não for reconhecido, reinicie o terminal." -ForegroundColor Yellow
 Write-Host "----------------------------------------------------" -ForegroundColor Green
