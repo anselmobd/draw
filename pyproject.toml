@@ -7,6 +7,12 @@ license = {text = "BSD-3-Clause"}
 requires-python = ">=3.10"
 dependencies = []
 
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.package-data]
+"draw" = ["assets/*.drw"]
+
 [project.scripts]
 draw = "draw.__main__:main"
 pydraw = "draw.__main__:main"
