@@ -28,6 +28,16 @@ if ! command -v python3 &> /dev/null; then
     exit 1
 fi
 
+# 1.1 Verificar se o módulo venv está disponível (Comum em Debian/Ubuntu vir sem)
+if ! python3 -m venv --help &> /dev/null; then
+    echo "ERRO: O módulo 'venv' do Python (Ambiente Virtual) não foi encontrado!"
+    echo "Em sistemas Debian/Ubuntu, você precisa instalá-lo manualmente:"
+    echo ""
+    echo "  sudo apt update && sudo apt install python3-venv"
+    echo ""
+    exit 1
+fi
+
 # 2. Criar diretórios de destino
 echo "[1/4] Criando pastas em $INSTALL_DIR..."
 mkdir -p "$INSTALL_DIR"
