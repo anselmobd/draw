@@ -8,10 +8,11 @@ e este projeto adere ao [Versionamento Semântico](https://semver.org/spec/v2.0.
 ## [Unreleased]
 
 ### Adicionado
-- 
+- Guia de release (`docs/release_guide.md`) e documentação detalhada de testes (`docs/testing.md`).
+- Configuração automática do `$PATH` no instalador Shell para melhor experiência do usuário final.
 
 ### Corrigido
-- 
+- Ajuste nos padrões de arquivo do `bumpver` para suporte correto ao formato do Changelog.
 
 ## [0.1.0] - 2026-06-07
 
