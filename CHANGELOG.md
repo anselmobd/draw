@@ -8,6 +8,14 @@ e este projeto adere ao [Versionamento Semântico](https://semver.org/spec/v2.0.
 ## [Unreleased]
 
 ### Adicionado
+- 
+
+### Corrigido
+- 
+
+## [0.1.2] - 2026-06-07
+
+### Adicionado
 - Inclusão automática da pasta `assets/` na distribuição do pacote.
 
 ### Corrigido
