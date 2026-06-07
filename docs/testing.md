@@ -47,6 +47,10 @@ Sempre que adicionar uma nova funcionalidade à `DrawEngine`, crie um novo caso 
 
 Para testar o processo de instalação e desinstalação em ambientes Linux reais utilizando o WSL, consulte o [Guia de Testes WSL](wsl_instructions.md).
 
+## Guia de Release
+
+Para entender o fluxo completo de como gerar uma nova versão oficial do sistema, consulte o [Guia de Release](release_guide.md).
+
 ---
 
 [Voltar ao README](../README.md)
