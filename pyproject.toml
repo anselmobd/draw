@@ -36,5 +36,5 @@ push = false
     '__version__ = "{version}"',
 ]
 "CHANGELOG.md" = [
-    '## [{version}]',
+    '## \[{version}\]',
 ]
