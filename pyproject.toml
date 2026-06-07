@@ -1,6 +1,6 @@
 [project]
 name = "draw"
-version = "0.1.1"
+version = "0.1.2"
 description = "Comando DRAW"
 readme = "README.md"
 license = {text = "BSD-3-Clause"}
@@ -27,7 +27,7 @@ pythonpath = ["src"]
 testpaths = ["tests"]
 
 [tool.bumpver]
-current_version = "0.1.1"
+current_version = "0.1.2"
 version_pattern = "MAJOR.MINOR.PATCH"
 commit_message = "bump version {old_version} -> {new_version}"
 commit = true
