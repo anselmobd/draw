@@ -6,11 +6,24 @@ Este documento lista possíveis evoluções para o projeto **DRAW Interpreter** 
 
 ## Próximos Passos
 
-### 1. Distribuição como Ferramenta CLI
-Preparar o pacote para ser instalado via `pip` e utilizado diretamente no terminal.
-- **Comando:** Utilizar `draw` ou `pydraw` (caso haja conflito) como ponto de entrada global no sistema.
-- **Configuração:** Ajustar `pyproject.toml` para definir os `project.scripts`.
+### 1. Distribuição Global e Acessibilidade (Portable CLI)
+Expandir o projeto para que pessoas que não são desenvolvedoras Python consigam utilizar o comando `draw` sem configurar ambientes virtuais ou gerenciar dependências.
 
+#### 1.1 Scripts de Instalação "One-Liner" (Fase Atual)
+Criar scripts automatizados que detectam o ambiente e instalam o `draw` pronto para uso.
+- **Linux/macOS (Bash):** Script que verifica o Python, cria um ambiente isolado em `~/.local/share/draw` e cria um link simbólico para o executável em `~/.local/bin`.
+- **Windows (PowerShell):** Script equivalente que instala em `%APPDATA%\draw` e ajusta o `PATH` do usuário.
+
+#### 1.2 Executáveis Estáticos (Binários)
+Gerar binários autônomos que não dependem de uma instalação prévia do Python no sistema do usuário.
+- **Tecnologias:** Usar PyInstaller ou Nuitka para empacotar tudo em um único arquivo (.exe no Windows, binário no Linux/macOS).
+
+#### 1.3 Gerenciadores de Pacotes Nativos
+Integrar o projeto nos fluxos de instalação padrão de cada sistema operacional.
+- **macOS/Linux:** Fórmulas para Homebrew.
+- **Windows:** Manifesto para WinGet ou Chocolatey.
+- **Linux:** Pacotes nativos (.deb, .rpm) ou AppImage.
+    
 ### 2. Estratégias de Ajuste de Escala
 Criar parâmetros via CLI para definir o comportamento do redesenho:
 - **Modo Estático:** Redesenha mantendo o tamanho original.
