@@ -43,5 +43,5 @@ push = false
     '__version__ = "{version}"',
 ]
 "CHANGELOG.md" = [
-    '## \[{version}\] - {date}',
+    '\[{version}\] - \d{4}-\d{2}-\d{2}',
 ]
