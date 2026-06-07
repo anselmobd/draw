@@ -81,14 +81,37 @@ EOF
 chmod +x "$INSTALL_DIR/uninstall.sh"
 ln -sf "$INSTALL_DIR/uninstall.sh" "$BIN_DIR/draw-uninstall"
 
-# 6. Finalização
+# 6. Finalização e Configuração de PATH
 echo "----------------------------------------------------"
 echo "  Instalação Concluída com Sucesso!"
 echo "----------------------------------------------------"
-echo "Você já pode usar o comando: draw"
-echo "Para desinstalar, use: draw-uninstall"
+
+# Verificar se o BIN_DIR está no PATH
+if [[ ":$PATH:" != *":$BIN_DIR:"* ]]; then
+    echo "Configurando acesso rápido ao comando 'draw'..."
+    
+    # Detectar o shell atual
+    SHELL_CONFIG=""
+    if [[ "$SHELL" == */zsh ]]; then
+        SHELL_CONFIG="$HOME/.zshrc"
+    elif [[ "$SHELL" == */bash ]]; then
+        SHELL_CONFIG="$HOME/.bashrc"
+    fi
+
+    if [ -n "$SHELL_CONFIG" ] && [ -f "$SHELL_CONFIG" ]; then
+        echo "export PATH=\"\$PATH:$BIN_DIR\"" >> "$SHELL_CONFIG"
+        echo "Adicionado $BIN_DIR ao seu $SHELL_CONFIG"
+        echo "IMPORTANTE: Feche este terminal e abra um novo para começar a usar!"
+    else
+        echo "Aviso: Não foi possível configurar o PATH automaticamente."
+        echo "Para usar o comando 'draw', adicione $BIN_DIR ao seu PATH manualmente."
+    fi
+else
+    echo "O comando 'draw' já está pronto para uso!"
+fi
+
 echo ""
-echo "Nota: Certifique-se de que '$BIN_DIR' está no seu PATH."
-echo "Se 'draw' não funcionar, adicione esta linha ao seu .bashrc ou .zshrc:"
-echo "export PATH=\"\$PATH:$BIN_DIR\""
+echo "Comandos disponíveis:"
+echo "  draw           - Inicia o interpretador"
+echo "  draw-uninstall - Remove o programa completamente"
 echo "----------------------------------------------------"
