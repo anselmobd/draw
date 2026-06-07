@@ -11,51 +11,47 @@ O projeto utiliza uma arquitetura modular que separa a lógica de interpretaçã
 - **Modos Avançados:** Suporte a comandos `B` (Blind - mover sem desenhar) e `N` (No Update - desenhar sem mover o cursor).
 - **Controle de Velocidade:** Parâmetro `--slow` para visualizar o desenho passo a passo.
 
-Para mais detalhes sobre como usar o programa, a arquitetura do projeto e o funcionamento interno, consulte os links abaixo:
+Para mais detalhes sobre como usar o programa e os comandos disponíveis, consulte:
 
 - [Manual do Usuário](docs/user_manual.md)
-- [Detalhes Técnicos](docs/technical_details.md)
-- [Guia de Testes](docs/testing.md)
-- [Backlog de Melhorias](docs/backlog.md)
-- [Criar Novo Renderer](docs/renderer_creation_guide.md)  
+
+Para desenvolvedores e contribuidores:
+- [Guia do Desenvolvedor](docs/developer_guide.md)
+
+## Instalação Rápida (Para Usuários)
+
+Se você deseja apenas utilizar o comando `draw` no seu sistema sem configurar ambientes de desenvolvimento:
+
+### Linux / macOS (Bash)
+```bash
+# Baixa e executa o instalador automático
+curl -sSL https://raw.githubusercontent.com/anselmobd/draw/main/scripts/install/install.sh | bash
+```
+
+### Windows (PowerShell)
+```powershell
+# Baixa e executa o instalador automático
+iwr -useb https://raw.githubusercontent.com/anselmobd/draw/main/scripts/install/install.ps1 | iex
+```
+
+*Nota: Os scripts acima configuram um ambiente isolado e criam o comando global `draw`. Requer Python 3 instalado. Para remover o programa, você pode usar o comando `draw-uninstall` que será criado durante a instalação.*
 
 ## Como Usar
 
-### Pré-requisitos
-- Python 3.10+
-- Tkinter (geralmente incluso no Python)
-
-### Execução
-
-Use o script `run.py` na raiz do projeto:
+Após a instalação, você pode usar o comando `draw` diretamente no seu terminal:
 
 ```bash
-# Executar o teste padrão (Gráfico)
-python run.py -t
+# Desenhar um triângulo no terminal (Console - Padrão)
+draw "TA45 U10 R10 D10"
 
-# Executar o teste padrão no Console
-python run.py -a c -t
+# Desenhar em uma janela gráfica (Tkinter)
+draw -a g "C12 U10 R10 D10 L10"
 
-# Executar o mock das coordenadas (respeitando a resolução do modo gráfico)
-python run.py -m "C4 U40 R40 D40"
-
-# Executar o mock das coordenadas (respeitando a resolução do terminal/console)
-python run.py -a c -m "C4 U10 R10 D10"
+# Ver a ajuda de comandos
+draw --help-draw
 ```
 
-> **Nota:** Após a execução do desenho, o programa aguardará que você pressione **Enter** ou **Espaço** para encerrar (fechar a janela ou retornar ao prompt). No console, nenhuma mensagem é exibida para não interferir no visual do desenho. O modo **Mock** (`-m`) não requer espera e encerra imediatamente após listar as coordenadas. A qualquer momento, você pode interromper a execução com **Ctrl+C**.
-
-### Argumentos Principais
-- `command` (posicional): Sequência de comandos DRAW (ex: `"C4 U10 R10"`).
-- `-a, --app {g,c}`: Seleciona o renderizador (g = gráfico, c = console).
-- `-p, --pixel-size`: Define o tamanho físico do pixel (ex: `2` ou `2x3`).
-- `-m, --mock`: Ativa o modo auditoria (lista coordenadas no console).
-- `-t, --test`: Executa desenhos de demonstração.
-- `-s, --slow [ms]`: Atraso entre comandos para visualização passo a passo.
-- `-f, --file [PATH]`: Carrega comandos de um arquivo de texto.
-- `-h, --help`: Lista todas as opções disponíveis.
-
-Consulte o [Manual do Usuário](docs/user_manual.md) para a lista completa e detalhada de comandos e opções.
+> **Nota:** Após o desenho, o programa aguardará você pressionar **Enter** ou **Espaço** para encerrar. No modo console, nenhuma mensagem é exibida para não interferir no visual. Você pode interromper a qualquer momento com **Ctrl+C**.
 
 ## Tabela de Comandos DRAW
 

@@ -2,16 +2,35 @@ import argparse
 import sys
 from draw import __version__
 from draw.core.engine import DrawEngine
-from draw.renderers.console_renderer import ConsoleRenderer
-from draw.renderers.tkinter_renderer import TkinterRenderer
-from draw.renderers.mock_renderer import MockRenderer
+
+
+# Importação tardia (Lazy Import) para evitar erros se o tkinter não estiver instalado
+def get_renderer(args, pixel_size, window_mode):
+    if args.app == "c":
+        from draw.renderers.console_renderer import ConsoleRenderer
+
+        return ConsoleRenderer(headless=args.mock, pixel_size=pixel_size)
+    else:
+        try:
+            from draw.renderers.tkinter_renderer import TkinterRenderer
+
+            return TkinterRenderer(
+                window_mode=window_mode, headless=args.mock, pixel_size=pixel_size
+            )
+        except ImportError:
+            print("ERRO: O módulo 'tkinter' não foi encontrado no seu sistema.")
+            print(
+                "Para usar o modo gráfico no Linux, instale: sudo apt install python3-tk"
+            )
+            print('\nVocê ainda pode usar o modo console com: draw -a c "comandos"')
+            sys.exit(1)
 
 
 def parse_args():
     parser = argparse.ArgumentParser(
         prog="draw",
         description="Interpretador DRAW Unificado",
-        epilog="Nota: O programa aguarda o pressionamento de qualquer tecla para encerrar após o desenho.",
+        epilog="Nota: O programa aguarda o pressionamento de ENTER ou ESPAÇO para encerrar após o desenho.",
     )
     parser.add_argument(
         "command", type=str, nargs="?", help="Executa uma string de comandos DRAW"
@@ -32,8 +51,8 @@ def parse_args():
         "-a",
         "--app",
         choices=["g", "c"],
-        default="g",
-        help="Escolha a apresentação: g (gráfico, padrão) ou c (console)",
+        default="c",
+        help="Escolha a apresentação: g (gráfico) ou c (console, padrão)",
     )
     parser.add_argument(
         "-m",
@@ -67,6 +86,8 @@ def parse_args():
 
     if args.help_draw:
         # Mock renderer apenas para instanciar a engine e pegar o help
+        from draw.renderers.mock_renderer import MockRenderer
+
         engine = DrawEngine(MockRenderer())
         print(engine.get_help_text())
         sys.exit(0)
@@ -102,14 +123,11 @@ def run_application(args):
     elif args.maximize:
         window_mode = "maximized"
 
-    if args.app == "c":
-        renderer = ConsoleRenderer(headless=args.mock, pixel_size=pixel_size)
-    else:
-        renderer = TkinterRenderer(
-            window_mode=window_mode, headless=args.mock, pixel_size=pixel_size
-        )
+    renderer = get_renderer(args, pixel_size, window_mode)
 
     if args.mock:
+        from draw.renderers.mock_renderer import MockRenderer
+
         w, h = renderer.get_resolution()
         renderer = MockRenderer(
             width=w,

@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Comando DRAW"
 readme = "README.md"
 license = {text = "BSD-3-Clause"}
-requires-python = ">=3.13"
+requires-python = ">=3.10"
 dependencies = []
 
 [project.scripts]
@@ -19,3 +19,22 @@ dev = [
 [tool.pytest.ini_options]
 pythonpath = ["src"]
 testpaths = ["tests"]
+
+[tool.bumpver]
+current_version = "0.1.0"
+version_pattern = "MAJOR.MINOR.PATCH"
+commit_message = "bump version {old_version} -> {new_version}"
+commit = true
+tag = true
+push = false
+
+[tool.bumpver.file_patterns]
+"pyproject.toml" = [
+    'version = "{version}"',
+]
+"src/draw/__init__.py" = [
+    '__version__ = "{version}"',
+]
+"CHANGELOG.md" = [
+    '## [{version}]',
+]
