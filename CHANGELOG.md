@@ -24,3 +24,4 @@ e este projeto adere ao [Versionamento Semântico](https://semver.org/spec/v2.0.
 - Modo de instalação CLI via `pip` com comandos `draw` e `pydraw`.
 - Redimensionamento dinâmico (redesenho) em tempo real.
 - Suporte a keypad Enter para fechar no modo gráfico.
+- Scripts de instalação automatizada (`install.sh` e `install.ps1`) em `scripts/install/`.
