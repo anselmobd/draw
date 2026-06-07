@@ -6,18 +6,18 @@ O **DRAW Interpreter** é uma ferramenta versátil para criar desenhos vetoriais
 
 ## Como Executar
 
-A execução é feita através do script principal `run.py`. Você pode passar uma string de comandos diretamente ou carregar um arquivo.
+A execução é feita através do comando `draw`. Você pode passar uma string de comandos diretamente ou carregar um arquivo.
 
 ### Comandos Rápidos
 ```bash
 # Desenhar um triângulo no modo gráfico
-python run.py "TA45 U10 R10 D10"
+draw "TA45 U10 R10 D10"
 
 # Desenhar o mesmo triângulo no console (terminal)
-python run.py -a c "TA45 U10 R10 D10"
+draw -a c "TA45 U10 R10 D10"
 
 # Carregar comandos de um arquivo
-python run.py -f meus_comandos.txt
+draw -f meus_comandos.txt
 ```
 
 ---
@@ -77,10 +77,10 @@ Você pode gerar artes pixeladas ajustando o tamanho do "pixel físico" via CLI.
 **Exemplo:**
 ```bash
 # Pixels gigantes quadrados de 10x10
-python run.py -p 10 "TA45 C4 U8 R8 D8 L8"
+draw -p 10 "TA45 C4 U8 R8 D8 L8"
 
 # Pixels retangulares (estilo monitores antigos)
-python run.py -p 2x4 "C14 U10 R10 D10 L10"
+draw -p 2x4 "C14 U10 R10 D10 L10"
 ```
 
 ---
