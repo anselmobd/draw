@@ -1,32 +1,20 @@
 # Backlog de Melhorias Sugeridas
 
-Este documento lista possíveis evoluções para o projeto **DRAW Interpreter**, focando em arquitetura, funcionalidades e experiência do desenvolvedor.
+Este documento lista possíveis evoluções para o projeto **DRAW Interpreter** e o status de melhorias já realizadas.
 
 ---
 
-## Funcionalidades e Renderização
+## Funcionalidades Implementadas (Recentemente)
 
-### 1. Sistema de Persistência e Redesenho Dinâmico
-Implementar um mecanismo centralizado na `DrawEngine` ou via histórico de comandos para permitir que o desenho seja reconstruído automaticamente em eventos de sistema.
+### 1. Sistema de Redesenho Dinâmico
+O sistema agora lida com redimensionamentos de forma robusta tanto no modo gráfico quanto no console.
+- **Gráfico:** Integração com eventos do Tkinter para recompor o desenho.
+- **Console:** Captura de `SIGWINCH` para redesenhar a arte adaptada ao novo tamanho do terminal.
+- **Ciclo de Vida:** Uso de *Context Managers* para garantir a limpeza do ambiente (cursor, terminal `cbreak`) mesmo em interrupções.
 
-#### 1.1 Redesenho no Modo Gráfico (Tkinter)
-- **Objetivo:** Garantir que o conteúdo não seja perdido e se adapte a mudanças de janela.
-- **Ações:** 
-    - Vincular ao evento `<Configure>` do Tkinter.
-    - Limpar o canvas e reiniciar a execução do histórico de comandos.
-    - Implementar debounce ou cancelamento de tarefa para lidar com redimensionamentos contínuos (arrastar borda), interrompendo o redesenho em curso para iniciar o novo.
+---
 
-#### 1.2 Redesenho no Modo Console
-- **Objetivo:** Adaptar o desenho ao novo tamanho do terminal (colunas/linhas).
-- **Ações:**
-    - Monitorar sinal `SIGWINCH` (Unix) ou mudanças no `os.get_terminal_size()`.
-    - Recalcular `logical_height` e redesenhar do zero para manter a centralização e proporções.
-    - Gerenciar a interrupção de fluxos lentos (com `--slow`) durante a atualização.
-
-#### 1.3 Estratégias de Ajuste de Escala (Futuro)
-- **Ideia:** Criar parâmetros via CLI para definir o comportamento do redesenho:
-    - **Modo Estático:** Redesenha mantendo o tamanho original.
-    - **Modo Proporcional:** Altera o `pixel-size` ou `scale` automaticamente para preencher a nova área disponível.
+## Próximos Passos
 
 ### 2. Exportação para Formatos Vetoriais (SVG)
 Aproveitar a arquitetura de Bridge para criar um `SVGRenderer`.
@@ -36,17 +24,14 @@ Aproveitar a arquitetura de Bridge para criar um `SVGRenderer`.
 O protocolo atual é limitado às 16 cores clássicas do CGA/BASIC.
 - **Ideia:** Adicionar um comando estendido (ex: `HC #RRGGBB`) que suporte cores 24-bit no modo gráfico e use algoritmos de proximidade (Euclidean distance) para mapear para a cor ANSI mais próxima no terminal.
 
-### 4. Redimensionamento Dinâmico (Console)
-Ajustar o renderizador de terminal para lidar com mudanças no tamanho da janela durante a execução.
-- **Ideia:** Capturar o sinal `SIGWINCH` (no Linux) para atualizar `logical_height` e centralizar o desenho em tempo real.
-
----
-
-## Qualidade de Código e Arquitetura
-
-### 5. Sistema de Macros e Sub-Desenhos
+### 4. Suporte a Macros e Sub-Desenhos
 Implementar suporte para definir blocos de comandos que podem ser reutilizados.
-- **Ideia:** Adicionar um comando `D n` (Define) para salvar uma sequência e um comando `X n` (eXecute) para chamá-la, similar ao que alguns dialetos BASIC faziam.
+- **Ideia:** Adicionar um comando `D n` (Define) para salvar uma sequência e um comando `X n` (eXecute) para chamá-la.
+
+### 5. Estratégias de Ajuste de Escala
+Criar parâmetros via CLI para definir o comportamento do redesenho:
+- **Modo Estático:** Redesenha mantendo o tamanho original.
+- **Modo Proporcional:** Altera o `pixel-size` ou `scale` automaticamente para preencher a nova área disponível.
 
 ---
 

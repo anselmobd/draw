@@ -44,6 +44,14 @@ Essencial para lidar com mudanças de tamanho de janela ou terminal sem perder o
     - Resetar flags de sinalização (ex: `self.needs_redraw = False`).
 3.  **`set_on_resize(callback)`**: Armazene este callback. Ele deve ser invocado quando o sistema operacional notificar um redimensionamento (ex: evento `<Configure>` no Tkinter ou `SIGWINCH` no Console).
 
+### 2.3 Gerenciamento de Vida Útil (Context Manager)
+Cada renderer herda suporte automático para blocos `with`. É altamente recomendado que renderers complexos implementem seus próprios métodos de entrada e saída para gerenciar hardware ou estados de sistema:
+
+- **`__enter__(self)`**: Prepare o ambiente (ex: esconder cursor, carregar assets). Deve retornar `self`.
+- **`__exit__(self, exc_type, exc_val, exc_tb)`**: Chame obrigatoriamente `self.finalize()` e restaure estados alterados do sistema.
+
+A `DrawEngine` e o `__main__.py` utilizam o renderer desta forma para garantir resiliência contra exceções e interrupções manuais.
+
 ---
 
 ## 3. Exemplo de Estrutura para Novo Renderer

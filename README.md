@@ -43,7 +43,7 @@ python run.py -m "C4 U40 R40 D40"
 python run.py -a c -m "C4 U10 R10 D10"
 ```
 
-> **Nota:** Após a execução do desenho, o programa aguardará que você pressione **qualquer tecla** para encerrar (fechar a janela ou retornar ao prompt). No console, nenhuma mensagem é exibida para não interferir no visual do desenho. O modo **Mock** (`-m`) não requer espera e encerra imediatamente após listar as coordenadas.
+> **Nota:** Após a execução do desenho, o programa aguardará que você pressione **Enter** ou **Espaço** para encerrar (fechar a janela ou retornar ao prompt). No console, nenhuma mensagem é exibida para não interferir no visual do desenho. O modo **Mock** (`-m`) não requer espera e encerra imediatamente após listar as coordenadas. A qualquer momento, você pode interromper a execução com **Ctrl+C**.
 
 ### Argumentos Principais
 - `command` (posicional): Sequência de comandos DRAW (ex: `"C4 U10 R10"`).

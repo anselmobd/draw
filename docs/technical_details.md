@@ -61,17 +61,26 @@ Para que o sistema de cores 0-15 funcione em ambos os modos:
 
 ---
 
-## Entrada Não-Bloqueante e Compatibilidade Windows
+## Gerenciamento de Ciclo de Vida e Terminal
 
-Para implementar a funcionalidade `wait_for_exit` ("pressione qualquer tecla para sair") sem poluir o desenho no console e garantir o funcionamento em diferentes sistemas, adotamos as seguintes decisões:
+Para garantir que o ambiente seja restaurado corretamente (como o cursor do terminal ou a limpeza de recursos gráficos), implementamos o padrão **Context Manager** na classe base `Renderer`.
 
-- **Windows (`os.name == "nt"`)**: 
-    - Utilizamos o módulo nativo `msvcrt` com a função `getch()`. Diferente do `input()` padrão, o `getch()` captura o código da tecla imediatamente sem ecoar o caractere na tela e sem exigir que o usuário pressione *Enter*.
-    - Na inicialização, executamos `os.system('')`. Este comando vazio é um gatilho documentado para que o terminal do Windows habilite o suporte nativo a sequências de escape ANSI (VT100), permitindo cores e posicionamento de cursor sem dependências externas como `colorama`.
+### Uso do Context Manager (`with`)
+O uso do bloco `with renderer:` garante que, independentemente de como o programa termine (sucesso, erro ou interrupção por Ctrl+C), o método `finalize()` será invocado:
+- O cursor do terminal é restaurado.
+- Janelas gráficas são fechadas.
+- O terminal volta ao modo de operação normal do sistema operacional.
 
-- **Linux/macOS (`posix`)**: 
-    - Utilizamos os módulos `termios` e `tty` para manipular os atributos do descritor de arquivo do `stdin`. 
-    - O terminal é colocado em **modo raw** temporariamente. Isso desativa o processamento de linha do sistema operacional (como o buffer que espera pelo *Enter* e o eco dos caracteres), permitindo a leitura de um único byte via `sys.stdin.read(1)`. Ao final, as configurações originais do terminal são restauradas para não quebrar a experiência do usuário no shell.
+### Entrada e Sinais no Console
+Adotamos o **modo cbreak** para o console, o que oferece um equilíbrio entre controle e funcionalidade:
+
+- **Modo `cbreak`**:
+    - Permite a leitura de teclas individuais sem esperar pela tecla *Enter* (vital para o `wait_for_exit`).
+    - Diferente do modo *raw*, ele preserva a geração de sinais do sistema. Isso permite que o **Ctrl+C** continue funcionando normalmente para interromper o programa, disparando um `KeyboardInterrupt` que o sistema captura para uma saída amigável.
+- **Restauração (`termios`)**:
+    - No Linux/macOS, o estado original do terminal é capturado no início da execução e restaurado milimetricamente no final, evitando que o shell do usuário fique "quebrado" (sem eco ou com configurações de linha alteradas).
+- **Windows**:
+    - O suporte a ANSI é habilitado via `os.system('')`, permitindo que o Windows execute as mesmas sequências de cores e posicionamento de cursor que outros sistemas.
 
 ---
 

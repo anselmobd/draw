@@ -84,10 +84,13 @@ python run.py -p 2x4 "C14 U10 R10 D10 L10"
 
 ---
 
-## Comandos do Teclado
+---
+
+## Comandos do Teclado e Interrupção
 Após o término de um desenho, a janela gráfica ou o terminal aguardará uma interação:
-- **Qualquer Tecla**: Fecha o programa ou limpa o terminal.
-- **ESC** (Modo Gráfico): Fecha a janela.
+- **Enter** ou **Espaço**: Fecha o programa de forma limpa.
+- **Ctrl+C**: Interrompe o desenho imediatamente (no terminal ou gráfico) e encerra o programa com uma mensagem de aviso.
+- **Fechar Janela (X)**: No modo gráfico, fecha a aplicação imediatamente.
 
 ---
 
