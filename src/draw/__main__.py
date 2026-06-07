@@ -32,8 +32,8 @@ def parse_args():
         "-a",
         "--app",
         choices=["g", "c"],
-        default="g",
-        help="Escolha a apresentação: g (gráfico, padrão) ou c (console)",
+        default="c",
+        help="Escolha a apresentação: g (gráfico) ou c (console, padrão)",
     )
     parser.add_argument(
         "-m",

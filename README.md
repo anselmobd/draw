@@ -41,11 +41,11 @@ iwr -useb https://raw.githubusercontent.com/anselmobd/draw/main/scripts/install/
 Após a instalação, você pode usar o comando `draw` diretamente no seu terminal:
 
 ```bash
-# Desenhar um triângulo simples
+# Desenhar um triângulo no terminal (Console - Padrão)
 draw "TA45 U10 R10 D10"
 
-# Desenhar no terminal (Console)
-draw -a c "C12 U10 R10 D10 L10"
+# Desenhar em uma janela gráfica (Tkinter)
+draw -a g "C12 U10 R10 D10 L10"
 
 # Ver a ajuda de comandos
 draw --help-draw

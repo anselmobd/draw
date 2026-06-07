@@ -9,22 +9,22 @@ Para desenvolvedores, a execução pode ser feita através do script `run.py` na
 ### Comando run.py
 
 ```bash
-# Executar o teste padrão (Gráfico)
+# Executar o teste padrão no Console (Padrão)
 python run.py -t
 
-# Executar o teste padrão no Console
-python run.py -a c -t
+# Executar o teste padrão no modo Gráfico
+python run.py -a g -t
 
-# Executar o mock das coordenadas (respeitando a resolução do modo gráfico)
+# Executar o mock das coordenadas (respeitando a resolução do console)
 python run.py -m "C4 U40 R40 D40"
 
-# Executar o mock das coordenadas (respeitando a resolução do terminal/console)
-python run.py -a c -m "C4 U10 R10 D10"
+# Executar o mock das coordenadas (respeitando a resolução do modo gráfico)
+python run.py -a g -m "C4 U10 R10 D10"
 ```
 
 ### Argumentos Principais (Desenvolvimento)
 - `command` (posicional): Sequência de comandos DRAW (ex: `"C4 U10 R10"`).
-- `-a, --app {g,c}`: Seleciona o renderizador (g = gráfico, c = console).
+- `-a, --app {g,c}`: Seleciona o renderizador (g = gráfico, c = console). Padrão: c.
 - `-p, --pixel-size`: Define o tamanho físico do pixel (ex: `2` ou `2x3`).
 - `-m, --mock`: Ativa o modo auditoria (lista coordenadas no console).
 - `-t, --test`: Executa desenhos de demonstração.

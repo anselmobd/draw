@@ -32,7 +32,7 @@ draw -f meus_comandos.txt
 | `-f, --file PATH` | Carrega e executa comandos DRAW de um arquivo de texto. |
 | `-t, --test` | Executa os desenhos de demonstração (`assets/teste_...`). |
 | `-s, --slow ms` | Adiciona um atraso em milissegundos entre cada comando (ideal para ver animação). |
-| `-a, --app {g,c}` | Escolha entre **g** (gráfico/Tkinter, padrão) ou **c** (console/terminal). |
+| `-a, --app {g,c}` | Escolha entre **g** (gráfico/Tkinter) ou **c** (console/terminal, padrão). |
 | `-m, --mock` | Modo de auditoria: exibe as coordenadas calculadas no console sem desenhar. |
 | `-F, --fullscreen` | Abre a janela gráfica em modo tela cheia (apenas modo gráfico). |
 | `-M, --maximize` | Abre a janela gráfica maximizada (apenas modo gráfico). |
