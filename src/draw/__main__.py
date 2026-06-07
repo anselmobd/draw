@@ -62,9 +62,8 @@ def parse_args():
     return args
 
 
-def main():
-    args = parse_args()
-
+def run_application(args):
+    """Configura o renderer, engine e executa os comandos."""
     if args.test and args.app == "g":
         args.pixel_size = "8"
 
@@ -104,19 +103,34 @@ def main():
             pixel_size=pixel_size,
         )
 
-    engine = DrawEngine(renderer, delay_ms=args.slow)
+    with renderer:
+        engine = DrawEngine(renderer, delay_ms=args.slow)
 
-    if args.test:
-        engine.execute_file("assets/teste.drw")
+        if args.test:
+            engine.execute_file("assets/teste.drw")
 
-    if args.command:
-        engine.execute(args.command)
+        if args.command:
+            engine.execute(args.command)
 
-    if args.file:
-        engine.execute_file(args.file)
+        if args.file:
+            engine.execute_file(args.file)
 
-    renderer.wait_for_exit()
-    renderer.finalize()
+        renderer.wait_for_exit()
+
+
+def main():
+    args = parse_args()
+    interrupted = False
+    try:
+        run_application(args)
+    except KeyboardInterrupt:
+        interrupted = True
+
+    if interrupted:
+        # Garante que o cursor volte e limpa formatação antes da mensagem
+        sys.stdout.write("\033[?25h\033[0m")
+        sys.stdout.flush()
+        print("\nInterrupção por Ctrl+C")
 
 
 if __name__ == "__main__":

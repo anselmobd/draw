@@ -15,6 +15,7 @@ class ConsoleRenderer(Renderer):
 
         super().__init__(pixel_size=pixel_size)
         self.needs_redraw = False
+        self.old_term_state = None
         self.atualizar_tamanho_terminal()
 
         # Registra o signal handler para redimensionamento (apenas Unix/Linux)
@@ -201,49 +202,70 @@ class ConsoleRenderer(Renderer):
             pass
 
     def wait_for_exit(self):
-        # Aguarda qualquer tecla para sair no console ou um sinal de redraw
-        while True:
-            if self.needs_redraw:
-                self.needs_redraw = False
-                self.atualizar_tamanho_terminal()
-                if self.on_resize_callback:
-                    self.on_resize_callback()
-                continue
+        """Aguarda as teclas Espaço ou Enter para sair no console, ou sinal de redraw."""
+        if not os.isatty(sys.stdin.fileno()):
+            sys.stdin.read(1)
+            return
 
-            try:
-                if os.name == "nt":
-                    import msvcrt
+        fd = sys.stdin.fileno()
+        try:
+            while True:
+                if self.needs_redraw:
+                    self.needs_redraw = False
+                    self.atualizar_tamanho_terminal()
+                    if self.on_resize_callback:
+                        self.on_resize_callback()
+                    continue
 
-                    # O msvcrt.kbhit() permite verificar se há tecla sem bloquear
-                    # Mas para o exercício, vamos manter o bloqueio simples
-                    msvcrt.getch()
-                    break
-                else:
-                    fd = sys.stdin.fileno()
-                    if os.isatty(fd):
-                        import tty
-                        import termios
-
-                        old_settings = termios.tcgetattr(fd)
-                        try:
-                            tty.setraw(fd)
-                            # Usamos select para poder ser interrompido por sinais ou timeout
-                            # Espera por entrada no stdin com timeout curto para checar flags
-                            r, _, _ = select.select([sys.stdin], [], [], 0.5)
-                            if r:
-                                sys.stdin.read(1)
-                                break
-                        finally:
-                            termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
-                    else:
-                        # Fallback se não for tty
-                        sys.stdin.read(1)
+                # Espera por entrada no stdin com timeout curto para checar flags de redraw
+                r, _, _ = select.select([fd], [], [], 0.05)
+                if r:
+                    try:
+                        data = os.read(fd, 1024)
+                        # Sair apenas se houver Espaço (32) ou Enter (13 ou 10)
+                        if any(c in data for c in (32, 13, 10)):
+                            break
+                    except OSError:
                         break
-            except (InterruptedError, select.error):
-                # Se for interrompido por sinal, volta ao início do loop para checar needs_redraw
-                continue
+        except Exception:
+            pass
+
+    def __enter__(self):
+        """Configura o terminal para leitura de teclas (modo cbreak)."""
+        if os.name != "nt" and sys.stdin.isatty():
+            try:
+                import tty
+                import termios
+
+                self.old_term_state = termios.tcgetattr(sys.stdin)
+                tty.setcbreak(sys.stdin.fileno())
+            except Exception:
+                pass
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        """Restaura o terminal e finaliza o renderer."""
+        self.finalize()
+        if self.old_term_state:
+            try:
+                import termios
+                import time
+
+                # Pequena pausa para garantir o dreno do buffer antes de restaurar
+                time.sleep(0.05)
+                termios.tcsetattr(
+                    sys.stdin.fileno(), termios.TCSAFLUSH, self.old_term_state
+                )
+            except Exception:
+                pass
 
     def finalize(self):
+        # Desabilita o signal handler de redimensionamento
+        if os.name != "nt":
+            try:
+                signal.signal(signal.SIGWINCH, signal.SIG_DFL)
+            except Exception:
+                pass
         sys.stdout.write(f"\033[{self.height};1H\033[0m\n")
         sys.stdout.write("\033[?25h")
         sys.stdout.flush()

@@ -180,7 +180,7 @@ class TkinterRenderer(Renderer):
         # usando Bresenham para consistência com o motor.
         x1_i, y1_i = int(math.floor(x1 + 0.5)), int(math.floor(y1 + 0.5))
         x2_i, y2_i = int(math.floor(x2 + 0.5)), int(math.floor(y2 + 0.5))
-        
+
         dx = abs(x2_i - x1_i)
         dy = abs(y2_i - y1_i)
         sx = 1 if x1_i < x2_i else -1
@@ -193,7 +193,12 @@ class TkinterRenderer(Renderer):
                 # Desenha o "pixel gigante"
                 # (cx, cy) são as coordenadas lógicas. Multiplicamos pelo tamanho do pixel.
                 self.canvas.create_rectangle(
-                    cx * pw, cy * ph, (cx + 1) * pw, (cy + 1) * ph, fill=color, outline=""
+                    cx * pw,
+                    cy * ph,
+                    (cx + 1) * pw,
+                    (cy + 1) * ph,
+                    fill=color,
+                    outline="",
                 )
             except tk.TclError:
                 self.alive = False
@@ -219,15 +224,17 @@ class TkinterRenderer(Renderer):
             self.alive = False
 
     def wait_for_exit(self):
-        # Fecha a janela ao pressionar qualquer tecla
+        """Aguardar as teclas Espaço ou Enter para sair da aplicação."""
         if not self.alive:
             return
-            
+
         try:
             self.root.protocol("WM_DELETE_WINDOW", self._on_exit)
-            self.root.bind("<Key>", self._on_exit)
+            # Vincula apenas as teclas solicitadas (Enter e Espaço)
+            self.root.bind("<space>", self._on_exit)
+            self.root.bind("<Return>", self._on_exit)
             self.root.mainloop()
-        except tk.TclError:
+        except (tk.TclError, KeyboardInterrupt):
             self.alive = False
 
     def _on_exit(self, event=None):
@@ -238,5 +245,7 @@ class TkinterRenderer(Renderer):
                 self.root.destroy()
             except tk.TclError:
                 pass
+
     def finalize(self):
-        pass
+        """Garante o fechamento da janela ao finalizar."""
+        self._on_exit()

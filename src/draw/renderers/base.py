@@ -50,6 +50,14 @@ class Renderer(ABC):
         """Limpa a área de desenho."""
         pass
 
+    def __enter__(self):
+        """Suporte para uso com 'with'."""
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        """Finaliza o renderer automaticamente ao sair do bloco 'with'."""
+        self.finalize()
+
     def prepare_for_redraw(self):
         """Prepara o renderer para um redesenho (ex: atualiza dimensões)."""
         pass
