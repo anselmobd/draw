@@ -82,6 +82,21 @@ Adotamos o **modo cbreak** para o console, o que oferece um equilíbrio entre co
 - **Windows**:
     - O suporte a ANSI é habilitado via `os.system('')`, permitindo que o Windows execute as mesmas sequências de cores e posicionamento de cursor que outros sistemas.
 
+## Automação de Documentação (Metadata)
+
+Para evitar que a documentação fique defasada em relação às capacidades do motor, a `DrawEngine` centraliza o conhecimento sobre os comandos e as cores clássicas.
+
+### Metadados Centralizados
+- **`commands_info`**: Um dicionário que mapeia cada caractere de comando (U, D, L, R, M, etc.) para sua descrição completa.
+- **`colors_info`**: Mapeamento dos índices 0-15 para nomes de cores amigáveis (ex: 4 -> Vermelho).
+
+### O Argumento `--help-draw`
+Ao executar o programa com esta flag, o sistema não entra no loop de desenho. Em vez disso, ele invoca `DrawEngine.get_help_text()`, que compõe dinamicamente uma tabela formatada:
+1. **Alinhamento**: Utiliza `ljust` para garantir que os nomes dos comandos e descrições fiquem em colunas.
+2. **Layout de Cores**: A paleta é exibida em duas colunas para economizar altura vertical no terminal, facilitando a consulta rápida.
+
+Essa arquitetura garante que, ao adicionar um novo comando à `DrawEngine`, o desenvolvedor só precisa atualizar o dicionário de metadados para que a ajuda CLI reflita a mudança automaticamente.
+
 ---
 
 ## Precisão e Simetria (Snap-to-Grid)

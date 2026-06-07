@@ -28,6 +28,7 @@ python run.py -f meus_comandos.txt
 | :--- | :--- |
 | `command` | String de comandos DRAW para execução imediata (ex: `"C4 U10"`). |
 | `-h, --help` | Exibe a mensagem de ajuda e sai. |
+| `--help-draw` | Exibe a lista detalhada de comandos DRAW e a paleta de cores interna. |
 | `-f, --file PATH` | Carrega e executa comandos DRAW de um arquivo de texto. |
 | `-t, --test` | Executa os desenhos de demonstração (`assets/teste_...`). |
 | `-s, --slow ms` | Adiciona um atraso em milissegundos entre cada comando (ideal para ver animação). |
@@ -88,7 +89,7 @@ python run.py -p 2x4 "C14 U10 R10 D10 L10"
 
 ## Comandos do Teclado e Interrupção
 Após o término de um desenho, a janela gráfica ou o terminal aguardará uma interação:
-- **Enter** ou **Espaço**: Fecha o programa de forma limpa.
+- **Enter** ou **Espaço**: Fecha o programa de forma limpa. Suporta o Enter do teclado numérico.
 - **Ctrl+C**: Interrompe o desenho imediatamente (no terminal ou gráfico) e encerra o programa com uma mensagem de aviso.
 - **Fechar Janela (X)**: No modo gráfico, fecha a aplicação imediatamente.
 
