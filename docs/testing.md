@@ -43,6 +43,10 @@ Os testes estão localizados na pasta `tests/` e cobrem:
 
 Sempre que adicionar uma nova funcionalidade à `DrawEngine`, crie um novo caso de teste em `tests/test_engine.py` utilizando o fixture `engine` para injetar o `MockRenderer`.
 
+## Testes de Distribuição (WSL Cross-Distro)
+
+Para testar o processo de instalação e desinstalação em ambientes Linux reais utilizando o WSL, consulte o [Guia de Testes WSL](wsl_instructions.md).
+
 ---
 
 [Voltar ao README](../README.md)

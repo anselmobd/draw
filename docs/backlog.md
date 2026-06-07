@@ -15,10 +15,11 @@ Implementar ferramentas para facilitar o lançamento de novas versões.
 - **CHANGELOG:** Manter um registro humano das mudanças para usuários finais.
 - **Automação de Release:** Estudar ferramentas como `bumpver` ou `commitizen` para automatizar o incremento de versão e tags.
 
-#### 1.1 Scripts de Instalação "One-Liner"
+#### 1.1 Scripts de Instalação "One-Liner" (Concluído)
 Criar scripts automatizados que detectam o ambiente e instalam o `draw` pronto para uso.
 - **Linux/macOS (Bash):** Script que verifica o Python, cria um ambiente isolado em `~/.local/share/draw` e cria um link simbólico para o executável em `~/.local/bin`.
 - **Windows (PowerShell):** Script equivalente que instala em `%APPDATA%\draw` e ajusta o `PATH` do usuário.
+- **Desinstalador:** Ambos os scripts agora criam um comando `draw-uninstall` para remoção limpa do sistema.
 
 #### 1.2 Executáveis Estáticos (Binários)
 Gerar binários autônomos que não dependem de uma instalação prévia do Python no sistema do usuário.
