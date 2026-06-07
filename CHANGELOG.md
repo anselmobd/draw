@@ -13,6 +13,14 @@ e este projeto adere ao [Versionamento Semântico](https://semver.org/spec/v2.0.
 ### Corrigido
 - 
 
+## [0.1.2] - 2026-06-07
+
+### Adicionado
+- Inclusão automática da pasta `assets/` na distribuição do pacote.
+
+### Corrigido
+- Execução do comando de teste (`draw -t`) agora funciona globalmente ao localizar o arquivo dentro do pacote instalado.
+
 ## [0.1.1] - 2026-06-07
 
 ### Adicionado

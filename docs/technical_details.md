@@ -18,9 +18,9 @@ O projeto segue as recomendações modernas do ecossistema Python utilizando o d
 
 ```text
 draw/
-├── assets/                  # Scripts DRAW (.txt) de exemplo
 ├── src/
 │   └── draw/                # Pacote principal
+│       ├── assets/          # Scripts DRAW (.drw) de exemplo inclusos no pacote
 │       ├── __init__.py
 │       ├── __main__.py      # CLI e orquestração
 │       ├── core/
