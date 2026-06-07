@@ -23,7 +23,7 @@ try {
     Write-Host "O DRAW Interpreter precisa do Python para rodar via script." -ForegroundColor Yellow
     Write-Host ""
     Write-Host "Sugestão de instalação:" -ForegroundColor Yellow
-    Write-Host "  - Execute no terminal: winget install Python.Python.3.13" -ForegroundColor White
+    Write-Host "  - Execute no terminal: winget install Python.Python.3.10" -ForegroundColor White
     Write-Host "  - Ou baixe em: https://python.org" -ForegroundColor White
     Write-Host ""
     Write-Host "DICA: No futuro, teremos uma versão .EXE que não exige Python." -ForegroundColor Cyan

@@ -16,7 +16,7 @@ echo "----------------------------------------------------"
 
 # 1. Verificar se o Python 3 está instalado
 if ! command -v python3 &> /dev/null; then
-    echo "ERRO: Python 3 não encontrado!"
+    echo "ERRO: Python 3 não encontrado (Recomendado: 3.10 ou superior)!"
     echo "O DRAW Interpreter precisa do Python 3 para rodar via script."
     echo ""
     echo "Sugestões de instalação:"
