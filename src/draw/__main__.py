@@ -52,8 +52,19 @@ def parse_args():
         default="1x1",
         help="Tamanho do pixel (ex: 2 ou 2x3)",
     )
+    parser.add_argument(
+        "--help-draw",
+        action="store_true",
+        help="Mostra a lista detalhada de comandos DRAW e sai",
+    )
 
     args = parser.parse_args()
+
+    if args.help_draw:
+        # Mock renderer apenas para instanciar a engine e pegar o help
+        engine = DrawEngine(MockRenderer())
+        print(engine.get_help_text())
+        sys.exit(0)
 
     if not (args.command or args.file or args.test):
         parser.print_help()

@@ -19,6 +19,58 @@ class DrawEngine:
         self.command_history = []
         self._is_running = False
         self._run_id = 0
+        self.commands_info = {
+            "U": "Move para Cima (Up) n unidades.",
+            "D": "Move para Baixo (Down) n unidades.",
+            "L": "Move para a Esquerda (Left) n unidades.",
+            "R": "Move para a Direita (Right) n unidades.",
+            "E": "Move para o Nordeste (diagonal cima-direita) n unidades.",
+            "F": "Move para o Sudeste (diagonal baixo-direita) n unidades.",
+            "G": "Move para o Sudoeste (diagonal baixo-esquerda) n unidades.",
+            "H": "Move para o Noroeste (diagonal cima-esquerda) n unidades.",
+            "M x,y": "Move para coordenada absoluta (x,y) ou relativa (+x,+y).",
+            "C n": "Define a cor atual (índice 0-15).",
+            "S n": "Define a escala do desenho (padrão 4).",
+            "A n": "Rotaciona em múltiplos de 90 graus (n=0 a 3).",
+            "TA n": "Rotaciona em um ângulo arbitrário (0-359 graus).",
+            "B": "Prefixo: Move sem desenhar (Blind).",
+            "N": "Prefixo: Desenha sem atualizar a posição final (No Update).",
+        }
+        self.colors_info = {
+            0: "Preto",
+            1: "Azul",
+            2: "Verde",
+            3: "Ciano",
+            4: "Vermelho",
+            5: "Magenta",
+            6: "Marrom / Amarelo Escuro",
+            7: "Cinza Claro",
+            8: "Cinza Escuro",
+            9: "Azul Claro",
+            10: "Verde Claro",
+            11: "Ciano Claro",
+            12: "Vermelho Claro",
+            13: "Magenta Claro",
+            14: "Amarelo",
+            15: "Branco",
+        }
+
+    def get_help_text(self):
+        """Retorna uma string formatada com a ajuda de todos os comandos DRAW."""
+        help_lines = ["\nComandos DRAW Disponíveis:", "=" * 30]
+        for cmd, desc in self.commands_info.items():
+            help_lines.append(f"  {cmd.ljust(8)} : {desc}")
+
+        help_lines.append("\nPaleta de Cores (C n):")
+        help_lines.append("=" * 30)
+        # Organiza as cores em colunas para economizar espaço vertical
+        for i in range(0, 16, 2):
+            c1 = f"{i}: {self.colors_info[i]}"
+            c2 = f"{i + 1}: {self.colors_info[i + 1]}"
+            help_lines.append(f"  {c1.ljust(26)} | {c2}")
+
+        help_lines.append("=" * 30)
+        return "\n".join(help_lines)
 
     def execute(self, draw_string, record=True):
         if record:
@@ -37,7 +89,7 @@ class DrawEngine:
                 self._is_running = False
                 # Não chamamos _do_redraw aqui para evitar recursão.
                 # O controle volta para quem chamou execute (wait_for_exit ou run_application)
-                return 
+                return
 
             if not self.renderer.is_alive():
                 self.stop()
