@@ -2,6 +2,11 @@
 # DRAW Interpreter - Instalador para Windows (PowerShell)
 # =================================================================
 
+# Força o console e a sessão a utilizar UTF-8 para evitar caracteres estranhos
+$OutputEncoding = [System.Text.Encoding]::UTF8
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+$PSDefaultParameterValues['*:Encoding'] = 'utf8'
+
 $InstallDir = "$HOME\AppData\Local\draw"
 $BinDir = "$HOME\AppData\Local\Microsoft\WindowsApps"
 $RepoUrl = "https://github.com/anselmobd/draw.git"
@@ -46,8 +51,8 @@ if (Test-Path "$InstallDir\repo") {
 # 4. Criar Venv e Instalar
 Write-Host "[3/4] Configurando ambiente isolado (venv)..."
 python -m venv "$InstallDir\venv"
-& "$InstallDir\venv\Scripts\pip.exe" install --upgrade pip
-& "$InstallDir\venv\Scripts\pip.exe" install -e "$InstallDir\repo"
+& "$InstallDir\venv\Scripts\python.exe" -m pip install --upgrade pip
+& "$InstallDir\venv\Scripts\python.exe" -m pip install -e "$InstallDir\repo"
 
 # 5. Criar o comando global (Bat wrapper)
 Write-Host "[4/4] Criando atalho draw.bat..."
