@@ -2,6 +2,11 @@
 # DRAW Interpreter - Instalador para Windows (PowerShell)
 # =================================================================
 
+# Força o console e a sessão a utilizar UTF-8 para evitar caracteres estranhos
+$OutputEncoding = [System.Text.Encoding]::UTF8
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+$PSDefaultParameterValues['*:Encoding'] = 'utf8'
+
 $InstallDir = "$HOME\AppData\Local\draw"
 $BinDir = "$HOME\AppData\Local\Microsoft\WindowsApps"
 $RepoUrl = "https://github.com/anselmobd/draw.git"
