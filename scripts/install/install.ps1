@@ -46,8 +46,8 @@ if (Test-Path "$InstallDir\repo") {
 # 4. Criar Venv e Instalar
 Write-Host "[3/4] Configurando ambiente isolado (venv)..."
 python -m venv "$InstallDir\venv"
-& "$InstallDir\venv\Scripts\pip.exe" install --upgrade pip
-& "$InstallDir\venv\Scripts\pip.exe" install -e "$InstallDir\repo"
+& "$InstallDir\venv\Scripts\python.exe" -m pip install --upgrade pip
+& "$InstallDir\venv\Scripts\python.exe" -m pip install -e "$InstallDir\repo"
 
 # 5. Criar o comando global (Bat wrapper)
 Write-Host "[4/4] Criando atalho draw.bat..."
