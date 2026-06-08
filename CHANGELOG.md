@@ -8,6 +8,17 @@ e este projeto adere ao [Versionamento Semântico](https://semver.org/spec/v2.0.
 ## [Unreleased]
 
 ### Adicionado
+- 
+
+### Alterado
+- 
+
+### Corrigido
+- 
+
+## [0.1.3] - 2026-06-08
+
+### Adicionado
 - Configuração de `OutputEncoding` para UTF-8 no instalador PowerShell para evitar caracteres corrompidos no console Windows.
 
 ### Alterado
