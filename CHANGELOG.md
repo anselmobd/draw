@@ -23,6 +23,7 @@ e este projeto adere ao [Versionamento Semântico](https://semver.org/spec/v2.0.
 
 ### Alterado
 - Scripts de instalação agora utilizam `python -m pip` para atualizações mais robustas do ambiente virtual.
+- Instaladores agora operam em modo silencioso (`--quiet`), exibindo apenas as etapas principais para uma experiência de usuário mais limpa.
 
 ### Corrigido
 - Erro de permissão ao atualizar o `pip` em sistemas Windows durante a instalação automática.

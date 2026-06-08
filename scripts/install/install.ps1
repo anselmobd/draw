@@ -39,20 +39,20 @@ try {
 Write-Host "[1/4] Criando pastas em $InstallDir..."
 if (!(Test-Path $InstallDir)) { New-Item -ItemType Directory -Path $InstallDir | Out-Null }
 
-# 3. Baixar código (Simplificado para o exemplo, assumindo que tem Git ou baixando via WebClient)
+# 3. Baixar código
 Write-Host "[2/4] Preparando código..."
 if (Test-Path "$InstallDir\repo") {
     Set-Location "$InstallDir\repo"
-    git pull
+    git pull --quiet
 } else {
-    git clone $RepoUrl "$InstallDir\repo"
+    git clone --quiet $RepoUrl "$InstallDir\repo"
 }
 
 # 4. Criar Venv e Instalar
 Write-Host "[3/4] Configurando ambiente isolado (venv)..."
 python -m venv "$InstallDir\venv"
-& "$InstallDir\venv\Scripts\python.exe" -m pip install --upgrade pip
-& "$InstallDir\venv\Scripts\python.exe" -m pip install -e "$InstallDir\repo"
+& "$InstallDir\venv\Scripts\python.exe" -m pip install --upgrade --quiet pip
+& "$InstallDir\venv\Scripts\python.exe" -m pip install --quiet -e "$InstallDir\repo"
 
 # 5. Criar o comando global (Bat wrapper)
 Write-Host "[4/4] Criando atalho draw.bat..."
