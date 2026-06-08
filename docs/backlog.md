@@ -48,6 +48,16 @@ Aproveitar a arquitetura de Bridge para criar um `SVGRenderer`.
 O protocolo atual é limitado às 16 cores clássicas do CGA/BASIC.
 - **Ideia:** Adicionar um comando estendido (ex: `HC #RRGGBB`) que suporte cores 24-bit no modo gráfico e use algoritmos de proximidade (Euclidean distance) para mapear para a cor ANSI mais próxima no terminal.
 
+### 6. Novos Renderizadores de Alta Resolução (Pixel-Perfect)
+Explorar tecnologias para desenhar pixels reais em ambientes sem interface gráfica (X11/Wayland).
+
+- **SixelRenderer**:
+    - **Características**: Utiliza o protocolo Sixel para enviar bitmaps codificados como sequências de escape ANSI através do terminal.
+    - **Aplicações**: Ideal para acessos remotos via **SSH**, WSL e terminais modernos (Kitty, iTerm2, VS Code). Permite ver desenhos em alta resolução dentro da própria janela do terminal.
+- **FramebufferRenderer**:
+    - **Características**: Escreve diretamente no dispositivo de memória de vídeo do kernel do Linux (`/dev/fb0`).
+    - **Aplicações**: Uso em **TTY puro** (consoles de sistema sem interface gráfica instalada), sistemas embarcados (como Raspberry Pi "headless") ou em situações de recuperação de sistema onde não há emulador de terminal disponível. Requer acesso físico ou via console serial.
+
 ---
 
 ## Experiência do Usuário (UX)
