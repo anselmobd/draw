@@ -47,16 +47,16 @@ mkdir -p "$BIN_DIR"
 echo "[2/4] Baixando código do repositório..."
 if [ -d "$INSTALL_DIR/repo" ]; then
     echo "Atualizando instalação existente..."
-    cd "$INSTALL_DIR/repo" && git pull
+    cd "$INSTALL_DIR/repo" && git pull --quiet
 else
-    git clone "$REPO_URL" "$INSTALL_DIR/repo"
+    git clone --quiet "$REPO_URL" "$INSTALL_DIR/repo"
 fi
 
 # 4. Criar Ambiente Virtual e Instalar
 echo "[3/4] Configurando ambiente isolado (venv)..."
 python3 -m venv "$INSTALL_DIR/venv"
-"$INSTALL_DIR/venv/bin/python" -m pip install --upgrade pip
-"$INSTALL_DIR/venv/bin/python" -m pip install -e "$INSTALL_DIR/repo"
+"$INSTALL_DIR/venv/bin/python" -m pip install --upgrade --quiet pip
+"$INSTALL_DIR/venv/bin/python" -m pip install --quiet -e "$INSTALL_DIR/repo"
 
 # 5. Criar o comando global (Wrapper)
 echo "[4/4] Criando atalho em $BIN_DIR/draw..."
